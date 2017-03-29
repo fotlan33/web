@@ -1,0 +1,4 @@
+# robots, scram
+
+User-agent:	*
+Disallow:	/

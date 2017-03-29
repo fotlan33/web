@@ -1,0 +1,65 @@
+/* ===== HTML Tags ===== */
+body {
+	padding-top: 2px;
+	padding-bottom: 10px;
+	background-color: #ffffff;
+}
+a {
+	color: #808080;
+	text-decoration: underline;
+}
+a:hover {
+	color: #000000;
+}
+
+/* ===== Profile CSS Styles ===== */
+.profile {
+	text-align: right;
+}
+a.profile {
+	color: #c0c0c0;
+	text-decoration: none;
+	line-height: 50px;
+}
+a.profile:hover {
+	color: #da8b06;
+	text-decoration: underline;
+}
+a.profile:active {
+	color: #da8b06;
+	text-decoration: none;
+}
+.profile-error {
+	display: none;
+	margin-top: 15px;
+	font-weight: bold;
+	text-align: center;
+}
+.profile-lbl {
+	color: #000000;
+	font-weight: bold;
+	display: block;
+	text-align: left;
+}
+
+/* ===== HomePage CSS Styles ===== */
+.hp_ground {
+	/* border-radius: 6px;*/
+	border: 1px solid #afab8e;
+	background-color: #f0ede0;
+	/*margin: 0px;*/
+}
+.hp_link {
+	outline: none;
+	text-decoration: none;
+}
+.hp_link img {
+	width: 320px;
+	height: 50px;
+	margin: 20px;
+	border: 2px solid #afab8e;
+}
+.hp_link:hover img {
+	box-shadow: 1px 1px 8px #808080;
+	border-color: #da8b06;
+}
