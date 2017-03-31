@@ -26,7 +26,7 @@ class FotlanProfile {
 			$this->IsAnonymous = false;
 
 		// Set Local Flag
-		if(mb_strripos($_SERVER['REMOTE_ADDR'], '192.168.192.', 0, 'UTF-8') === false)
+		if(strripos($_SERVER['REMOTE_ADDR'], '192.168.1.', 0) === false)
 			$this->IsLocal = false;
 		else
 			$this->IsLocal = true;

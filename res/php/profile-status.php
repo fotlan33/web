@@ -12,8 +12,8 @@ $u = new FotlanProfile();
 	<title>Profil Fotlan</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<link rel="stylesheet" type="text/css" href="../css/bootstrap-3.3.7.min.css" />
-	<link rel="stylesheet" type="text/css" href="../css/fotlan.css" />
+	<link rel="stylesheet" type="text/css" href="/res/css/bootstrap-3.3.7.min.css" />
+	<link rel="stylesheet" type="text/css" href="/res/css/fotlan.css" />
 	<script type="text/javascript">
 	function ScreenSize() {
 		document.getElementById('screen_width').innerHTML = screen.width;
@@ -24,7 +24,7 @@ $u = new FotlanProfile();
 <body onload="ScreenSize();">
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-xs-6"><a href="/hp/"><img src="../img/fotlan.png" alt="FotLan" width="140" height="50" /></a></div>
+			<div class="col-xs-6"><a href="/hp/"><img src="/res/img/fotlan.png" alt="FotLan" width="140" height="50" /></a></div>
 			<div class="col-xs-6 profile"><? $u->Display(''); ?>
 			</div>
 		</div>
@@ -36,8 +36,8 @@ $u = new FotlanProfile();
 			</blockquote>
 		</div>
 	</div>
-	<script type="text/javascript" src="../js/jquery-3.2.0.min.js"></script>
-	<script type="text/javascript" src="../js/bootstrap-3.3.7.min.js"></script>
-	<script type="text/javascript" src="../js/fotlan.js"></script>
+	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>
+	<script type="text/javascript" src="/res/js/bootstrap-3.3.7.min.js"></script>
+	<script type="text/javascript" src="/res/js/fotlan.js"></script>
 </body>
 </html>

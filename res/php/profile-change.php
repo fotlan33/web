@@ -21,24 +21,22 @@ if($user == '') {
 } else {
 
 	//+++++ Database Connection +++++
-	$con = msConnectDB('dbu_fotlan');
+	$db = msConnectDB('dbu_fotlan');
 
 	//+++++ SQL Request +++++
-	$rs = $con->query("SELECT login,admin FROM t_profiles WHERE login='$user' AND pswd='$pswd'");
+	$sql = "SELECT login, admin FROM t_profiles WHERE login = :user AND pswd = :pswd";
+	$rs = $db->prepare($sql);
+	$rs->execute(array(':user' => $user, ':pswd' => $pswd));
 
 	//+++++ Set Cookie +++++
-	if($rs->num_rows > 0) {
-		$row = $rs->fetch_row();
-		setcookie('username', $row[0], mktime(0, 0, 0, 1, 1, 2075), '/');
-		setcookie('admin', $row[1], mktime(0, 0, 0, 1, 1, 2075), '/');
+	if($row = $rs->fetch(PDO::FETCH_ASSOC)) {
+		setcookie('username', $row['login'], mktime(0, 0, 0, 1, 1, 2075), '/');
+		setcookie('admin', $row['admin'], mktime(0, 0, 0, 1, 1, 2075), '/');
 		$response = 'Yes';
 	}
 	else
 		$response = 'No';
 
-	//+++++ Close Connection +++++
-	$rs->free();
-	$con->close();
 }
 //+++++ HTTP Response +++++
 echo "<Profile><Change>$response</Change></Profile>";
