@@ -43,9 +43,6 @@ a.profile:active {
 }
 
 /* ===== HomePage CSS Styles ===== */
-.hp-header {
-	border-bottom: 1px solid #afab8e;
-}
 .hp-bloc {
 	text-align: center;
 	margin-top: 10px;
@@ -54,9 +51,6 @@ a.profile:active {
 .hp-link {
 	outline: none;
 	text-decoration: none;
-}
-.hp-link img {
-	/* spacing: 20px;*/
 }
 .hp-link:hover img {
 	box-shadow: 1px 1px 8px #808080;

@@ -27,4 +27,9 @@ function msEscapeQuotes($_s, $_GPC) {
 		return addslashes($_s);
 }
 
+//+++++ Convert MySQL Date to French Standard Date +++++
+function msFormatStandardDate($_d) {
+	return substr($_d, 8, 2) . '/' . substr($_d, 5, 2) . '/' . substr($_d, 0, 4);
+}
+
 ?>

@@ -40,4 +40,5 @@ if($user == '') {
 }
 //+++++ HTTP Response +++++
 echo "<Profile><Change>$response</Change></Profile>";
+
 ?>

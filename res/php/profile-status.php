@@ -25,12 +25,12 @@ $u = new FotlanProfile();
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xs-6"><a href="/hp/"><img src="/res/img/fotlan.png" alt="FotLan" width="140" height="50" /></a></div>
-			<div class="col-xs-6 profile"><? $u->Display(''); ?>
+			<div class="col-xs-6 profile"><?php $u->Display(''); ?>
 			</div>
 		</div>
 		<div class="row">
 			<blockquote>
-				<b>Utilisateur</b> : <? echo($u->Username); ?><br />
+				<b>Utilisateur</b> : <?= $u->Username ?><br />
 				<b>Largeur &eacute;cran</b> : <span id="screen_width"></span><br />
 				<b>Hauteur &eacute;cran</b> : <span id="screen_height"></span>
 			</blockquote>
