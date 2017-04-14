@@ -29,7 +29,10 @@ function msEscapeQuotes($_s, $_GPC) {
 
 //+++++ Convert MySQL Date to French Standard Date +++++
 function msFormatStandardDate($_d) {
-	return substr($_d, 8, 2) . '/' . substr($_d, 5, 2) . '/' . substr($_d, 0, 4);
+	if(is_null($_d) || strlen($_d) < 10)
+		return null;
+	else
+		return substr($_d, 8, 2) . '/' . substr($_d, 5, 2) . '/' . substr($_d, 0, 4);
 }
 
 ?>
