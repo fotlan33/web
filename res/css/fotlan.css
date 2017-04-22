@@ -56,3 +56,10 @@ a.profile:active {
 	box-shadow: 1px 1px 8px #808080;
 	border-color: #da8b06;
 }
+
+/* ===== Mediatheque CSS Styles ===== */
+.hp-frame {
+	border: none;
+	height: 600px;
+	width: 100%;
+}

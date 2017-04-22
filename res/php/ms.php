@@ -1,11 +1,29 @@
 <?php
 
+define('CONFIG_FILE', getenv('DOCUMENT_ROOT') . '/../.config.ini');
+
 //+++++ Database connection +++++
-function msConnectDB($_dbname) {
-	$_host = get_cfg_var('fotlan.mysql.host');
-	$_user = get_cfg_var('fotlan.mysql.user');
-	$_pswd = get_cfg_var('fotlan.mysql.pswd');
-	$_con = new PDO('mysql:host=' . $_host . ';dbname=' . $_dbname . ';charset=utf8', $_user, $_pswd);
+function msConnectDB($_dbname = null) {
+	if(file_exists(CONFIG_FILE)) {
+		$_conf = parse_ini_file(CONFIG_FILE);
+		if(is_array($_conf) && array_key_exists('fotlan.mysql.host', $_conf)
+			&& array_key_exists('fotlan.mysql.user', $_conf) && array_key_exists('fotlan.mysql.pswd', $_conf)) {
+			$_host = $_conf['fotlan.mysql.host'];
+			$_user = $_conf['fotlan.mysql.user'];
+			$_pswd = $_conf['fotlan.mysql.pswd'];
+			if(is_null($_dbname))
+				$_dbname = $_conf['fotlan.mysql.dbname'];
+			$_con = new PDO('mysql:host=' . $_host . ';dbname=' . $_dbname . ';charset=utf8', $_user, $_pswd);
+			if($_con)
+				return $_con;
+			else 
+				die('Echec de connexion a la base de donnees.');
+		} else {
+			die('Parametres de connexion introuvables.');
+		}
+	} else {
+		die('Fichier de configuration introuvable.');
+	}
 	return $_con;
 }
 
@@ -35,4 +53,36 @@ function msFormatStandardDate($_d) {
 		return substr($_d, 8, 2) . '/' . substr($_d, 5, 2) . '/' . substr($_d, 0, 4);
 }
 
+//+++++ Buil MySQL Date from French Standard Date +++++
+function msFormatMysqlDate($_d, $_default = null) {
+	if(strlen($_d) < 10)
+		return $_default;
+	else {
+		$_yyyy = substr($_d, 6, 4);
+		$_mm = substr($_d, 3, 2);
+		$_dd = substr($_d, 0, 2);
+		if(checkdate(intval($_mm), intval($_dd), intval($_yyyy)))
+			return "$_yyyy-$_mm-$_dd";
+		else
+			return $_default;
+	}
+}
+
+//+++++ Check value : isset, length, ... +++++
+function msFormatString($_string, $_default = null, $_len = 0) {
+	if(isset($_string) && trim($_string) != '') {
+		$_buf = trim($_string);
+		if(strlen($_buf) > $_len)
+			return substr($_buf, 0, $_len);
+		else 
+			return $_buf;
+	} else {
+		return $_default;
+	}
+}
+
+//+++++ Secure String for HTML Display +++++
+function msSecureString($_string) {
+	return htmlspecialchars($_string, ENT_COMPAT | ENT_HTML5);
+}
 ?>

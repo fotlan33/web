@@ -31,6 +31,7 @@ $u = new FotlanProfile();
 		<div class="row">
 			<blockquote>
 				<b>Utilisateur</b> : <?= $u->Username ?><br />
+				<b>MySQL Host</b> : <?= get_cfg_var('fotlan.mysql.host') ?><br />
 				<b>Largeur &eacute;cran</b> : <span id="screen_width"></span><br />
 				<b>Hauteur &eacute;cran</b> : <span id="screen_height"></span>
 			</blockquote>

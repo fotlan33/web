@@ -27,17 +27,17 @@ $u = new FotlanProfile();
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-12 ctc-center"><div class="ctc-title">Carnet d'adresses</div></div>
+			<div class="col-sm-12 ctc-center"><div class="ctc-title">Carnet d'adresses</div></div>
 		</div>
 		<div class="row">
-			<div class="col-lg-12">
-				<table id="ctc-table" class="table table-striped table-hover">
+			<div class="col-sm-12">
+				<table id="ctc-table" class="table table-striped table-hover dt-responsive nowrap">
 					<thead>
 						<tr>
 							<th>NOM Prénom</th>
-							<th>Ville</th>
-							<th>Téléphone</th>
-							<th>Mobile</th>
+							<th class="hidden-xs">Ville</th>
+							<th class="hidden-xs">Téléphone</th>
+							<th class="hidden-xs">Mobile</th>
 						</tr>
 					</thead>
 					<tbody>

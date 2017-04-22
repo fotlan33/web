@@ -21,7 +21,7 @@ if($user == '') {
 } else {
 
 	//+++++ Database Connection +++++
-	$db = msConnectDB('dbu_fotlan');
+	$db = msConnectDB();
 
 	//+++++ SQL Request +++++
 	$sql = "SELECT login, admin FROM t_profiles WHERE login = :user AND pswd = :pswd";

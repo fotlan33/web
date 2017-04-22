@@ -1,6 +1,8 @@
 function LoadContacts() {
-    $('#ctc-table').DataTable( {
+	var table = $('#ctc-table').DataTable( {
     	ajax: '/contacts/ajax_list.php',
+    	info: false,
+    	pagingType: 'simple',
         language: {
             processing:		"Traitement en cours...",
             search:			"Rechercher&nbsp;:",
@@ -24,6 +26,13 @@ function LoadContacts() {
             }
         }
     } );
+	if(screen.width < 768) {
+		$('#ctc-table_length').hide();
+		table.column(1).visible(false, false);
+		table.column(2).visible(false, false);
+		table.column(3).visible(false, false);
+		table.columns.adjust().draw(false);		
+	}
 }
 
 function InitEdition() {
@@ -49,6 +58,48 @@ function InitEdition() {
     		$('#ctc-nom-group').addClass('has-error has-feedback');
     		$('.form-control-feedback').addClass('glyphicon-remove');
     		$('#frm-nom').focus();
+    	} else {
+    		
+    		// Save contact
+    		$.post('ajax_save.php', {
+    			id: $('#frm-id').val(),
+    			titre: $('#frm-titre').val(),
+    			prenom: $('#frm-prenom').val(),
+    			nom: $('#frm-nom').val(),
+    			pseudo: $('#frm-pseudo').val(),
+    			naissance: $('#frm-naissance').val(),
+    			fonction: $('#frm-fonction').val(),
+    			societe: $('#frm-societe').val(),
+    			priv_email: $('#frm-priv-email').val(),
+    			priv_web: $('#frm-priv-web').val(),
+    			priv_tel: $('#frm-priv-tel').val(),
+    			priv_gsm: $('#frm-priv-gsm').val(),
+    			priv_adresse: $('#frm-priv-adresse').val(),
+    			priv_adresse_ext: $('#frm-priv-adresse-ext').val(),
+    			priv_cp: $('#frm-priv-cp').val(),
+    			priv_ville: $('#frm-priv-ville').val(),
+    			priv_pays: $('#frm-priv-pays').val(),
+    			pro_email: $('#frm-pro-email').val(),
+    			pro_web: $('#frm-pro-web').val(),
+    			pro_tel: $('#frm-pro-tel').val(),
+    			pro_gsm: $('#frm-pro-gsm').val(),
+    			pro_adresse: $('#frm-pro-adresse').val(),
+    			pro_adresse_ext: $('#frm-pro-adresse-ext').val(),
+    			pro_cp: $('#frm-pro-cp').val(),
+    			pro_ville: $('#frm-pro-ville').val(),
+    			pro_pays: $('#frm-pro-pays').val(),
+    			remarques: $('#frm-remarques').val()
+    		}, function(data) {
+    			var response = jQuery.parseJSON(data);
+    			if(response.err_no == 0) {
+    				$('#frm-id').val(response.id);
+    				$('#frm-alert').removeClass('alert-danger').addClass('alert-success');
+    				$('#frm-alert').text('Contact enregistré !').show('slow').delay(3000).hide('slow');
+    			} else {
+    				$('#frm-alert').removeClass('alert-success').addClass('alert-danger');
+    				$('#frm-alert').text(response.err_text + ' (' + response.err_no + ')').show('slow').delay(3000).hide('slow');
+    			}
+    		});
     	}
     	return false;
     });

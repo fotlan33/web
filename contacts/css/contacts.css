@@ -30,4 +30,11 @@
 	font-style: italic;
 	font-size: 10px;
 	text-align: right;
+	height: 50px;
+}
+.ctc-alert {
+	display: none;
+	margin-top: 15px;
+	font-weight: bold;
+	text-align: center;
 }

@@ -9,7 +9,7 @@ $u = new FotlanProfile();
 $id = (isset($_GET['id']) && trim($_GET['id']) != '') ? trim($_GET['id']) : 0;
 
 //+++++ SQL request +++++
-$db = msConnectDB('dbu_fotlan');
+$db = msConnectDB();
 $rs = $db->prepare("SELECT * FROM t_contacts WHERE id_contact = :id");
 $rs->execute(array(':id' => $id));
 
@@ -72,7 +72,10 @@ if($titre == '')
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-12 ctc-center"><div class="ctc-title"><?= $titre ?></div></div>
+			<div class="col-sm-12 ctc-center"><div class="ctc-title"><?= $titre ?></div></div>
+		</div>
+		<div class="col-sm-12 text-right">
+			<a href="." class="ctc-link">Retour à liste de contacts</a>
 		</div>
 		<div class="row ctc-row">
 			<form id="frm" class="form-horizontal">
@@ -89,18 +92,18 @@ if($titre == '')
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="frm-prenom">Prénom :</label>
-					<div class="col-sm-10"><input type="text" class="form-control" id="frm-prenom" placeholder="Prénom" maxlength="50" value="<?= $row['prenom'] ?>" /></div>
+					<div class="col-sm-10"><input type="text" class="form-control" id="frm-prenom" placeholder="Prénom" maxlength="50" value="<?= msSecureString($row['prenom']) ?>" /></div>
 				</div>
 				<div class="form-group" id="ctc-nom-group">
 					<label class="control-label col-sm-2" for="frm-nom">NOM :</label>
 					<div class="col-sm-10">
-						<input type="text" class="form-control" id="frm-nom" placeholder="NOM" maxlength="50" value="<?= $row['nom'] ?>" />
+						<input type="text" class="form-control" id="frm-nom" placeholder="NOM" maxlength="50" value="<?= msSecureString($row['nom']) ?>" />
 						<span class="glyphicon form-control-feedback"></span>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="frm-pseudo">Pseudonyme :</label>
-					<div class="col-sm-10"><input type="text" class="form-control" id="frm-pseudo" placeholder="Pseudonyme" maxlength="50" value="<?= $row['pseudo'] ?>" /></div>
+					<div class="col-sm-10"><input type="text" class="form-control" id="frm-pseudo" placeholder="Pseudonyme" maxlength="50" value="<?= msSecureString($row['pseudo']) ?>" /></div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="frm-naissance">Naissance :</label>
@@ -113,11 +116,11 @@ if($titre == '')
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="frm-fonction">Fonction :</label>
-					<div class="col-sm-10"><input type="text" class="form-control" id="frm-fonction" placeholder="Commercial, Agent, Médecin, ..." maxlength="100" value="<?= $row['fonction'] ?>" /></div>
+					<div class="col-sm-10"><input type="text" class="form-control" id="frm-fonction" placeholder="Commercial, Agent, Médecin, ..." maxlength="100" value="<?= msSecureString($row['fonction']) ?>" /></div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="frm-societe">Société :</label>
-					<div class="col-sm-10"><input type="text" class="form-control" id="frm-societe" placeholder="Société / Dir. / Dpt." maxlength="100" value="<?= $row['societe'] ?>" /></div>
+					<div class="col-sm-10"><input type="text" class="form-control" id="frm-societe" placeholder="Société / Dir. / Dpt." maxlength="100" value="<?= msSecureString($row['societe']) ?>" /></div>
 				</div>
 				<div class="panel-group">
 					<div class="panel panel-warning">
@@ -125,39 +128,39 @@ if($titre == '')
 						<div class="panel-body">
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-email">E-mail :</label>
-								<div class="col-sm-10"><input type="email" class="form-control" id="frm-priv-email" placeholder="E-mail" maxlength="100" value="<?= $row['priv_email'] ?>" /></div>
+								<div class="col-sm-10"><input type="email" class="form-control" id="frm-priv-email" placeholder="E-mail" maxlength="100" value="<?= msSecureString($row['priv_email']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-web">Web :</label>
-								<div class="col-sm-10"><input type="url" class="form-control" id="frm-priv-web" placeholder="Site Web" maxlength="100" value="<?= $row['priv_web'] ?>" /></div>
+								<div class="col-sm-10"><input type="url" class="form-control" id="frm-priv-web" placeholder="Site Web" maxlength="100" value="<?= msSecureString($row['priv_web']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-tel">Tél. :</label>
-								<div class="col-sm-10"><input type="tel" class="form-control" id="frm-priv-tel" placeholder="Téléphone fixe" maxlength="50" value="<?= $row['priv_tel'] ?>" /></div>
+								<div class="col-sm-10"><input type="tel" class="form-control" id="frm-priv-tel" placeholder="Téléphone fixe" maxlength="50" value="<?= msSecureString($row['priv_tel']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-gsm">Mobile :</label>
-								<div class="col-sm-10"><input type="tel" class="form-control" id="frm-priv-gsm" placeholder="Téléphone mobile" maxlength="50" value="<?= $row['priv_gsm'] ?>" /></div>
+								<div class="col-sm-10"><input type="tel" class="form-control" id="frm-priv-gsm" placeholder="Téléphone mobile" maxlength="50" value="<?= msSecureString($row['priv_gsm']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-adresse">Adresse :</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-adresse" placeholder="Adresse" maxlength="200" value="<?= $row['priv_adresse'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-adresse" placeholder="Adresse" maxlength="200" value="<?= msSecureString($row['priv_adresse']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-adresse-ext">&nbsp;</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-adresse-ext" placeholder="Complément d'adresse" maxlength="100" value="<?= $row['priv_adresse_ext'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-adresse-ext" placeholder="Complément d'adresse" maxlength="100" value="<?= msSecureString($row['priv_adresse_ext']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-cp">Code postal :</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-cp" placeholder="Code postal" maxlength="10" value="<?= $row['priv_cp'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-cp" placeholder="Code postal" maxlength="10" value="<?= msSecureString($row['priv_cp']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-ville">Ville :</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-ville" placeholder="Ville" maxlength="50" value="<?= $row['priv_ville'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-ville" placeholder="Ville" maxlength="50" value="<?= msSecureString($row['priv_ville']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-priv-pays">Pays :</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-pays" placeholder="Pays" maxlength="50" value="<?= $row['priv_pays'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-priv-pays" placeholder="Pays" maxlength="50" value="<?= msSecureString($row['priv_pays']) ?>" /></div>
 							</div>
 						</div>
 					</div>
@@ -166,48 +169,50 @@ if($titre == '')
 						<div class="panel-body">
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-email">E-mail :</label>
-								<div class="col-sm-10"><input type="email" class="form-control" id="frm-pro-email" placeholder="E-mail" maxlength="100" value="<?= $row['pro_email'] ?>" /></div>
+								<div class="col-sm-10"><input type="email" class="form-control" id="frm-pro-email" placeholder="E-mail" maxlength="100" value="<?= msSecureString($row['pro_email']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-web">Web :</label>
-								<div class="col-sm-10"><input type="url" class="form-control" id="frm-pro-web" placeholder="Site Web" maxlength="100" value="<?= $row['pro_web'] ?>" /></div>
+								<div class="col-sm-10"><input type="url" class="form-control" id="frm-pro-web" placeholder="Site Web" maxlength="100" value="<?= msSecureString($row['pro_web']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-tel">Tél. :</label>
-								<div class="col-sm-10"><input type="tel" class="form-control" id="frm-pro-tel" placeholder="Téléphone fixe" maxlength="50" value="<?= $row['pro_tel'] ?>" /></div>
+								<div class="col-sm-10"><input type="tel" class="form-control" id="frm-pro-tel" placeholder="Téléphone fixe" maxlength="50" value="<?= msSecureString($row['pro_tel']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-gsm">Mobile :</label>
-								<div class="col-sm-10"><input type="tel" class="form-control" id="frm-pro-gsm" placeholder="Téléphone mobile" maxlength="50" value="<?= $row['pro_gsm'] ?>" /></div>
+								<div class="col-sm-10"><input type="tel" class="form-control" id="frm-pro-gsm" placeholder="Téléphone mobile" maxlength="50" value="<?= msSecureString($row['pro_gsm']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-adresse">Adresse :</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-adresse" placeholder="Adresse" maxlength="200" value="<?= $row['pro_adresse'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-adresse" placeholder="Adresse" maxlength="200" value="<?= msSecureString($row['pro_adresse']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-adresse-ext">&nbsp;</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-adresse-ext" placeholder="Complément d'adresse" maxlength="100" value="<?= $row['pro_adresse_ext'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-adresse-ext" placeholder="Complément d'adresse" maxlength="100" value="<?= msSecureString($row['pro_adresse_ext']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-cp">Code postal :</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-cp" placeholder="Code postal" maxlength="10" value="<?= $row['pro_cp'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-cp" placeholder="Code postal" maxlength="10" value="<?= msSecureString($row['pro_cp']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-ville">Ville :</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-ville" placeholder="Ville" maxlength="50" value="<?= $row['pro_ville'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-ville" placeholder="Ville" maxlength="50" value="<?= msSecureString($row['pro_ville']) ?>" /></div>
 							</div>
 							<div class="form-group">
 								<label class="control-label col-sm-2" for="frm-pro-pays">Pays :</label>
-								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-pays" placeholder="Pays" maxlength="50" value="<?= $row['pro_pays'] ?>" /></div>
+								<div class="col-sm-10"><input type="text" class="form-control" id="frm-pro-pays" placeholder="Pays" maxlength="50" value="<?= msSecureString($row['pro_pays']) ?>" /></div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label col-sm-2" for="frm-remarques">Notes :</label>
-					<div class="col-sm-10"><textarea class="form-control" id="frm-remarques"><?= $row['remarques'] ?></textarea></div>
+					<div class="col-sm-10"><textarea class="form-control" id="frm-remarques"><?= msSecureString($row['remarques']) ?></textarea></div>
 				</div>
+				<div id="frm-alert" class="alert alert-block alert-success ctc-alert col-sm-12">Retour</div>
 				<div class="col-sm-offset-2 col-sm-10"><button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-save"></span> Enregistrer</button></div>
+				<input type="hidden" id="frm-id" value="<?= msSecureString($row['id_contact']) ?>" />
 			</form>
 		</div>
 		<div class="row">
