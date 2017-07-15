@@ -29,9 +29,16 @@ $u = new FotlanProfile();
 		<div class="row">
 			<div class="col-sm-12 ctc-center"><div class="ctc-title">Carnet d'adresses</div></div>
 		</div>
+<?php if($u->IsAdministrator) {
+		echo '		<div class="row">
+			<div class="col-sm-12 ctc-center"><a href="gapi_redirect.php" class="ctc-link">Synchroniser</a> - <a href="edit.php" class="ctc-link">Ajouter un contact...</a></div>
+		</div>
+';	
+}  
+?>
 		<div class="row">
 			<div class="col-sm-12">
-				<table id="ctc-table" class="table table-striped table-hover dt-responsive nowrap">
+				<table id="ctc-table" class="table table-striped table-hover">
 					<thead>
 						<tr>
 							<th>NOM Prénom</th>

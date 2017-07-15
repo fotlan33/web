@@ -74,8 +74,8 @@ if($titre == '')
 		<div class="row">
 			<div class="col-sm-12 ctc-center"><div class="ctc-title"><?= $titre ?></div></div>
 		</div>
-		<div class="col-sm-12 text-right">
-			<a href="." class="ctc-link">Retour à liste de contacts</a>
+		<div class="row">
+			<div class="col-sm-12 ctc-center"><a href="." class="ctc-link">Retour à liste de contacts</a></div>
 		</div>
 		<div class="row ctc-row">
 			<form id="frm" class="form-horizontal">
@@ -210,13 +210,16 @@ if($titre == '')
 					<label class="control-label col-sm-2" for="frm-remarques">Notes :</label>
 					<div class="col-sm-10"><textarea class="form-control" id="frm-remarques"><?= msSecureString($row['remarques']) ?></textarea></div>
 				</div>
-				<div id="frm-alert" class="alert alert-block alert-success ctc-alert col-sm-12">Retour</div>
+				<div id="frm-alert" class="alert alert-block alert-success ctc-alert col-sm-12"><a name=""></a>Retour</div>
 				<div class="col-sm-offset-2 col-sm-10"><button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-save"></span> Enregistrer</button></div>
 				<input type="hidden" id="frm-id" value="<?= msSecureString($row['id_contact']) ?>" />
 			</form>
 		</div>
 		<div class="row">
 			<div class="col-sm-12 ctc-update">modifié le <?= msFormatStandardDate($row['mise_a_jour']) ?></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 ctc-center"><a id="ctc-bottom" href="." class="ctc-link">Retour à liste de contacts</a></div>
 		</div>
 	</div>
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>

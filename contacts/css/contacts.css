@@ -38,3 +38,25 @@
 	font-weight: bold;
 	text-align: center;
 }
+.ctc-way {
+	cursor: pointer;
+	text-align: center;
+	color: #e6520b;
+	font-size: 24px;
+}
+.ctc-action {
+	cursor: pointer;
+	text-align: center;
+	color: #50BF19;
+	font-size: 24px;
+}
+.ctc-action-off {
+	text-align: center;
+	color: #808080;
+	font-size: 24px;
+}
+.ctc-action-error {
+	text-align: center;
+	color: #FF0000;
+	font-size: 24px;
+}

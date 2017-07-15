@@ -1,6 +1,7 @@
 <?php
 
 define('CONFIG_FILE', getenv('DOCUMENT_ROOT') . '/../.config.ini');
+define('CERT_FILE', getenv('DOCUMENT_ROOT') . '/../.cert.pem');
 
 //+++++ Database connection +++++
 function msConnectDB($_dbname = null) {
@@ -85,4 +86,22 @@ function msFormatString($_string, $_default = null, $_len = 0) {
 function msSecureString($_string) {
 	return htmlspecialchars($_string, ENT_COMPAT | ENT_HTML5);
 }
+
+//+++++ Display debug string +++++
+function msDebug($buf, $html = false) {
+	if($html)
+		echo $buf . "<br />\n";
+	else 
+		echo $buf . "\n";
+} 
+
+//+++++ Normalize newlines +++++
+function cr2nl($s)
+{
+	$s = mb_eregi_replace("\r\n" , "\n", $s);
+	$s = mb_eregi_replace("\r" , "\n", $s);
+	$s = mb_eregi_replace("\n\n" , "\n", $s);
+	return($s);
+}
+
 ?>

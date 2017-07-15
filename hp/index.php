@@ -38,7 +38,7 @@ $u = new FotlanProfile();
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://home.fotlan.com/corsica2010/"><img src="img/corsica.png" alt="Corsica 2010" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://www.lachainemeteo.com/meteo/courcouronnes/france/prevision_meteo_courcouronnes_france_ville_1394_0.php"><img src="img/meteo.png" alt="Meteo" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="https://mabanque.bnpparibas/"><img src="img/bnp.png" alt="BNP Paribas" /></a></div>
-			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://www.allocine.fr/seance/salle_gen_csalle=B0059.html"><img src="img/allocine.png" alt="Cin&eacute;ma Evry" /></a></div>
+			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://www.allocine.fr/seance/salle_gen_csalle=B1139.html"><img src="img/allocine.png" alt="Cin&eacute;ma Evry" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="/ceb/"><img src="img/ceb.png" alt="Le Compte est Bon" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="/cv/"><img src="img/cv.png" alt="CV" /></a></div>
 		</div>

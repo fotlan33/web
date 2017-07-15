@@ -100,7 +100,44 @@ function InitEdition() {
     				$('#frm-alert').text(response.err_text + ' (' + response.err_no + ')').show('slow').delay(3000).hide('slow');
     			}
     		});
+    		location.href = "#ctc-bottom";
     	}
     	return false;
     });
+}
+
+function InitSynchro() {
+	
+	// Change sync way
+	$('.ctc-way').click(function() {
+		var o = $(this).find('i');
+		if(o.hasClass('glyphicon-circle-arrow-right'))
+			o.removeClass('glyphicon-circle-arrow-right').addClass('glyphicon-circle-arrow-left');
+		else
+			o.removeClass('glyphicon-circle-arrow-left').addClass('glyphicon-circle-arrow-right');
+	});
+	
+	// Proceed sync
+	$('.ctc-action').click(function() {
+		$.post('ajax_sync.php', {
+			group_id: $('#group-id').val(),
+			parent_id: $(this).parent().attr('id'),
+			google_id: $(this).find('[name="google-id"]').val(),
+			fotlan_id: $(this).find('[name="fotlan-id"]').val(),
+			google_value: $(this).find('[name="google-value"]').val(),
+			fotlan_value: $(this).find('[name="fotlan-value"]').val(),
+			property_name: $(this).find('[name="property-name"]').val(),
+			sync_way: ($(this).parent().find('i').hasClass('glyphicon-circle-arrow-right')) ? 'G2F' : 'F2G'
+		}, function(data) {
+			var response = jQuery.parseJSON(data);
+			var oparent = $('#' + response.parent_id);
+			if(response.err_no > 0) {
+				oparent.find('[class="ctc-action-off"]').removeClass('ctc-action-off').addClass('ctc-action-error');
+			} else {
+				oparent.remove();
+			}
+		});
+		$(this).removeClass('ctc-action').addClass('ctc-action-off');
+	});
+
 }
