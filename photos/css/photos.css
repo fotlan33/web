@@ -52,7 +52,34 @@
 	color: #808080;
 }
 
+/* ===== Import CSS Styles ===== */
+.pic-upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+.pic-upload-btn {
+  border: 2px solid #FF6314;
+  color: #FF6314;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.pic-upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
+
 /* ===== Blueimp Gallery Custom CSS Styles ===== */
+.blueimp-gallery > .title {
+	white-space: nowrap;
+}
 .blueimp-gallery > .download {
   position: absolute;
   top: 50px;
@@ -74,6 +101,26 @@
   opacity: 1;
 }
 .blueimp-gallery-controls > .download {
+  display: block;
+  /* Fix z-index issues (controls behind slide element) on Android: */
+  -webkit-transform: translateZ(0);
+     -moz-transform: translateZ(0);
+      -ms-transform: translateZ(0);
+       -o-transform: translateZ(0);
+          transform: translateZ(0);
+}
+.blueimp-gallery > .date {
+  position: absolute;
+  top: 40px;
+  left: 15px;
+  line-height: 20px;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+  opacity: 0.8;
+  display: none;
+  font-size: 12px;
+}
+.blueimp-gallery-controls > .date {
   display: block;
   /* Fix z-index issues (controls behind slide element) on Android: */
   -webkit-transform: translateZ(0);

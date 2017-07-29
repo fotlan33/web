@@ -5,13 +5,14 @@ require_once('../res/php/ms.php');
 require_once('../res/php/profile-class.php');
 
 //+++++ Parameters +++++
+$db = msConnectDB();
 $u = new FotlanProfile();
 $response = array(	'id'		=> 0,
 					'err_no'	=> 401,
 					'err_text'	=> 'ERREUR : Non autorisé' );
 
 //+++++ Check autorization +++++
-if(($u->Username == 'Fot') || ($u->Username == 'Mumu')) {
+if($u->GetRight($db, 'CONTACTS') == 'RW') {
 
 	// +++++ Retrieve data +++++
 	$id = (isset($_POST['id']) && trim($_POST['id']) != '') ? trim($_POST['id']) : 0;
@@ -43,7 +44,6 @@ if(($u->Username == 'Fot') || ($u->Username == 'Mumu')) {
 					':remarques'		=> msFormatString($_POST['remarques'], null, 1000) );
 
 	// +++++ Save data +++++
-	$db = msConnectDB();
 	if($id == 0) {
 		$sql = "INSERT INTO t_contacts (titre, prenom, nom, pseudo, naissance, fonction, societe, priv_email, priv_web, priv_tel, priv_gsm, priv_adresse, priv_adresse_ext, priv_cp, priv_ville, priv_pays,
 				pro_email, pro_web, pro_tel, pro_gsm, pro_adresse, pro_adresse_ext, pro_cp, pro_ville, pro_pays, remarques, mise_a_jour)

@@ -62,14 +62,18 @@ $db = msConnectDB('dbu_pictures');
 				$pic->ID = $row['id_picture'];
 				$pic->Date = $row['date'];
 				$pic->Extension = $row['extension'];
-				echo "\t\t\t<a href=\"" . $pic->VirtualPath() . $pic->FileName('p') . "\" title=\"" . htmlspecialchars($row['label'], ENT_QUOTES, 'UTF-8') . "\">";
+				echo "\t\t\t<a href=\"" . $pic->VirtualPath() . $pic->FileName('p')
+							. "\" title=\"" . htmlspecialchars($row['label'], ENT_QUOTES, 'UTF-8')
+							. "\" data-pic-source=\"" . $pic->VirtualPath() . $pic->FileName('i')
+							. "\" data-pic-date=\"" . msFormatShortDate($row['date']) . "\">";
 				echo "<img src=\"" . $pic->VirtualPath() . $pic->FileName('v') . "\" alt=\"" . htmlspecialchars($row['label'], ENT_QUOTES, 'UTF-8') . "\" /></a>\n";
 			}				
 ?>
 		</div>
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
     <div class="slides"></div>
-    <h3 class="title" id="pic-gallery-title"></h3>
+    <h3 class="title"></h3>
+    <h4 class="date"></h4>
     <a class="prev">‹</a>
     <a class="next">›</a>
     <a class="close">×</a>
@@ -90,25 +94,6 @@ $db = msConnectDB('dbu_pictures');
 	<script type="text/javascript" src="/res/js/fotlan.js"></script>
 	<script type="text/javascript" src="js/blueimp.gallery-2.25.2.min.js"></script>
 	<script type="text/javascript" src="js/menu.js"></script>
-<script>
-document.getElementById('pic-links').onclick = function (event) {
-    event = event || window.event;
-    var target = event.target || event.srcElement,
-        link = target.src ? target.parentNode : target,
-        options = {	index: link,
-                	event: event,
-                    onslide: function (index, slide) {
-                        var text = this.list[index].getAttribute('href'),
-                            node = this.container.find('.download');
-                        if (text) {
-                            //TODO : put data-pic-source
-                            node[0].setAttribute('href', text.replace('/p0', '/i0'));
-                        }
-                    }
-    	},
-        links = this.getElementsByTagName('a');
-    blueimp.Gallery(links, options);
-};
-</script>
+	<script type="text/javascript" src="js/gallery.js"></script>
 </body>
 </html>

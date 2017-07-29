@@ -22,6 +22,8 @@ class Folder {
 				$sql = "SELECT * FROM t_folders WHERE id_folder = :id";
 				if(isset($_GET['f']))
 					$data = array(':id' => $_GET['f']);
+				elseif(isset($_POST['f']))
+					$data = array(':id' => $_GET['f']);
 				else
 					$data = array(':id' => ROOT_ID);
 				break;

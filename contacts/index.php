@@ -1,9 +1,11 @@
 <?php
 
 //+++++ Include +++++
+require_once('../res/php/ms.php');
 require_once '../res/php/profile-class.php';
 
 //+++++ Parameters +++++
+$db = msConnectDB();
 $u = new FotlanProfile();
 ?>
 <!DOCTYPE html>
@@ -29,7 +31,7 @@ $u = new FotlanProfile();
 		<div class="row">
 			<div class="col-sm-12 ctc-center"><div class="ctc-title">Carnet d'adresses</div></div>
 		</div>
-<?php if($u->IsAdministrator) {
+<?php if($u->GetRight($db, 'CONTACTS') == 'RW') {
 		echo '		<div class="row">
 			<div class="col-sm-12 ctc-center"><a href="gapi_redirect.php" class="ctc-link">Synchroniser</a> - <a href="edit.php" class="ctc-link">Ajouter un contact...</a></div>
 		</div>

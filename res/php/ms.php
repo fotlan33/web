@@ -54,7 +54,25 @@ function msFormatStandardDate($_d) {
 		return substr($_d, 8, 2) . '/' . substr($_d, 5, 2) . '/' . substr($_d, 0, 4);
 }
 
-//+++++ Buil MySQL Date from French Standard Date +++++
+//+++++ Convert MySQL Date to French Short Date +++++
+function msFormatShortDate($_d) {
+	$_months = array(	'01' => 'jan.',
+						'02' => 'fév.',
+						'03' => 'mars',
+						'04' => 'avr.',
+						'05' => 'mai',
+						'06' => 'juin',
+						'07' => 'juil.',
+						'08' => 'août',
+						'09' => 'sep.',
+						'10' => 'oct.',
+						'11' => 'nov.',
+						'12' => 'déc.' );
+	return(intval(mb_substr($_d, 8, 2, 'UTF-8')) . ' ' . $_months[mb_substr($_d, 5, 2, 'UTF-8')] . ' ' . mb_substr($_d, 0, 4, 'UTF-8'));
+}
+
+
+//+++++ Build MySQL Date from French Standard Date +++++
 function msFormatMysqlDate($_d, $_default = null) {
 	if(strlen($_d) < 10)
 		return $_default;
