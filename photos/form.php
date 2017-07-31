@@ -9,6 +9,7 @@
 	<input type="file" id="uploadfiles" multiple="multiple" accept="image/*" />
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>
 	<script type="text/javascript">
+	
 	var uploadfiles = document.querySelector('#uploadfiles');
 	uploadfiles.addEventListener('change', function () {
 	    var files = this.files;
@@ -18,17 +19,17 @@
 	}, false);
 	
 	function uploadFile(file){
-	    var url = 'server/index.php';
+	    var url = '/photos/upload.php';
 	    var xhr = new XMLHttpRequest();
 	    var fd = new FormData();
-	    xhr.open("POST", url, true);
+	    xhr.open('POST', url, true);
 	    xhr.onreadystatechange = function() {
 	        if (xhr.readyState == 4 && xhr.status == 200) {
 	            // Every thing ok, file uploaded
 	            console.log(xhr.responseText); // handle response.
 	        }
 	    };
-	    fd.append("upload_file", file);
+	    fd.append('photo_upload', file);
 	    xhr.send(fd);
 	}
 	</script>
