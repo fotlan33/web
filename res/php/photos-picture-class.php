@@ -26,7 +26,7 @@ class Picture {
 
 	//----- Constructor -----
 	function __construct() {
-		$this->db = msConnectDB('dbu_pictures');
+		$this->db = msConnectDB();
 	}
 
 	//----- Destructor  -----
@@ -36,7 +36,7 @@ class Picture {
 
 	//----- Methods ----- 
 	public function Open($PictureID) {
-		$sql = "SELECT * FROM t_pictures WHERE id_picture = $PictureID";
+		$sql = "SELECT * FROM pic_data WHERE id_picture = $PictureID";
 		if($rs = $this->db->query($sql)) {
 			$row = $rs->fetch_array();
 			$this->ID = $PictureID;
@@ -53,7 +53,7 @@ class Picture {
 
 	public function Save() {
 		if($this->ID == 0) {
-			$sql = "INSERT INTO t_pictures SET
+			$sql = "INSERT INTO pic_data SET
 				label = '" . msEscapeQuotes($this->Label, false) . "',
 				keywords = '" . msEscapeQuotes($this->Keywords, false) . "',
 				width = " . $this->Width . ",
@@ -68,7 +68,7 @@ class Picture {
 			$rs->free();
 		}
 		else {
-			$sql = "UPDATE t_pictures SET
+			$sql = "UPDATE pic_data SET
 				label = '" . msEscapeQuotes($this->Label, false) . "',
 				keywords = '" . msEscapeQuotes($this->Keywords, false) . "',
 				width = " . $this->Width . ",
@@ -86,7 +86,7 @@ class Picture {
 		$this->DeleteFile($this->Path() . $this->FileName('v'));
 		$this->DeleteFile($this->Path() . $this->FileName('p'));
 		$this->DeleteFile($this->Path() . $this->FileName('i'));
-		$sql = "DELETE FROM t_pictures WHERE id_picture = " . $this->ID;
+		$sql = "DELETE FROM pic_data WHERE id_picture = " . $this->ID;
 		$this->db->query($sql);
 	}
 

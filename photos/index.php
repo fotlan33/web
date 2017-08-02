@@ -9,7 +9,8 @@ require_once '../res/php/photos-picture-class.php';
 $u = new FotlanProfile();
 $folder = new Folder();
 $subfolders = $folder->GetChildren();
-$db = msConnectDB('dbu_pictures');
+$db = msConnectDB();
+$bEdit = $folder->IsManager($u);
 
 ?>
 <!DOCTYPE html>
@@ -38,9 +39,9 @@ $db = msConnectDB('dbu_pictures');
 		<div class="row">
 			<div class="col-xs-2 pic-menu<?php if($folder->IsRoot()) echo '-disabled'; ?>" title="Dossier parent" id="pic-menu-parent"><span class="glyphicon glyphicon-chevron-up"></span></div>
 			<div class="col-xs-2 pic-menu<?php if(count($subfolders) == 0) echo '-disabled'; ?>" title="Sous-dossiers" id="pic-menu-subfolders"><span class="glyphicon glyphicon-chevron-down"></span></div>
-			<div class="col-xs-2 pic-menu" title="Rechercher"><span class="glyphicon glyphicon-search"></span></div>
-			<div class="col-xs-2 pic-menu" title="Importer"><span class="glyphicon glyphicon-import"></span></div>
-			<div class="col-xs-2 pic-menu col-xs-offset-2" title="Propriétés du dossier"><span class="glyphicon glyphicon-pencil"></span></div>
+			<div class="col-xs-2 pic-menu" title="Rechercher" id="pic-menu-search"><span class="glyphicon glyphicon-search"></span></div>
+			<div class="col-xs-2 pic-menu<?php if(!$bEdit) echo '-disabled'; ?>" title="Importer" id="pic-menu-import"><span class="glyphicon glyphicon-import"></span></div>
+			<div class="col-xs-2 pic-menu<?php if(!$bEdit) echo '-disabled'; ?> col-xs-offset-2" title="Propriétés du dossier" id="pic-menu-edit"><span class="glyphicon glyphicon-pencil"></span></div>
 		</div>
 		<div class="row" id="pic-subfolders" style="display:none;">
 <?php
@@ -52,7 +53,7 @@ $db = msConnectDB('dbu_pictures');
 		<div id="pic-links">
 <?php
 			$sql = "SELECT id_picture, label, width, height, size, date, extension, keywords
-					FROM t_pictures
+					FROM pic_data
 					WHERE id_folder = :folder
 					ORDER BY date DESC, id_picture DESC";
 			$rs = $db->prepare($sql);
@@ -89,6 +90,7 @@ $db = msConnectDB('dbu_pictures');
 ?>
 	</div>
 	<input type="hidden" id="pic-parent-id" value="<?php if(!is_null($p = $folder->GetParent())) echo $p->ID; ?>" />
+	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID; ?>" />
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap-3.3.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/fotlan.js"></script>

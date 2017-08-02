@@ -16,4 +16,19 @@ $(document).ready(function() {
 		}
 	});
 
+	// Search menu
+	$('#pic-menu-search.pic-menu').click(function() {
+		location.href = 'search.php?f=' + $('#pic-folder-id').val();
+	});
+
+	// Import menu
+	$('#pic-menu-import.pic-menu').click(function() {
+		location.href = 'import.php?f=' + $('#pic-folder-id').val();
+	});
+
+	// Edit menu
+	$('#pic-menu-edit.pic-menu').click(function() {
+		location.href = 'edit.php/?f=' + $('#pic-folder-id').val();
+	});
+
 });

@@ -37,6 +37,7 @@ $folder = new Folder();
 				<input type="file" id="pic-uploadfiles" multiple="multiple" accept="image/*" />
 			</div>
 		</div>
+		<div class="row pic-transfer">En attente de fichiers...</div>
 	</div>
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID; ?>" />
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>

@@ -62,7 +62,7 @@ $Message<a class=\"profile\" href=\"#profile-box\" data-toggle=\"modal\">" . $th
 	}
 
 	function GetRight($MySqlConnection, $Application) {
-		$sql = "SELECT aut_droit FROM t_autorisations
+		$sql = "SELECT aut_droit FROM t_applications
 				WHERE aut_profile = :profile AND aut_appli = :appli
 				ORDER BY aut_no ASC LIMIT 1";
 		$rs = $MySqlConnection->prepare($sql);

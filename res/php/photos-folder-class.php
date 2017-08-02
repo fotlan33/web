@@ -4,6 +4,7 @@
 define('ROOT_ID', '0');
 define('ROOT_NAME', 'Photos');
 require_once 'ms.php';
+require_once 'profile-class.php';
 
 //+++++ Class ++++++
 class Folder {
@@ -16,23 +17,23 @@ class Folder {
 
 	//----- Constructor -----
 	function __construct() {
-		$this->db = msConnectDB('dbu_pictures');
+		$this->db = msConnectDB();
 		switch(func_num_args()) {
 			case 0:
-				$sql = "SELECT * FROM t_folders WHERE id_folder = :id";
+				$sql = "SELECT * FROM pic_folders WHERE id_folder = :id";
 				if(isset($_GET['f']))
 					$data = array(':id' => $_GET['f']);
 				elseif(isset($_POST['f']))
-					$data = array(':id' => $_GET['f']);
+					$data = array(':id' => $_POST['f']);
 				else
 					$data = array(':id' => ROOT_ID);
 				break;
 			case 1:
-				$sql = "SELECT * FROM t_folders WHERE id_folder = :id";
+				$sql = "SELECT * FROM pic_folders WHERE id_folder = :id";
 				$data = array(':id' => func_get_arg(0));
 				break;
 			case 2:
-				$sql = "SELECT * FROM t_folders WHERE folder = :folder AND path = :path";
+				$sql = "SELECT * FROM pic_folders WHERE folder = :folder AND path = :path";
 				$data = array(':folder' => func_get_arg(0), ':path' => func_get_arg(1));
 				break;
 		}
@@ -59,7 +60,20 @@ class Folder {
 		return($this->ID == ROOT_ID);
 	}
 
-	public function IsManager($user) {
+	public function IsManager($User) {
+		if($User->GetRight($this->db, 'PHOTOS') == 'RW') {
+			return true;
+		} else {
+			$sql = "SELECT id_right FROM pic_rights
+					WHERE login = :user
+					AND id_folder = :folder";
+			$rs = $this->db->prepare($sql);
+			$rs->execute(array(':user' => $User->Username, ':folder' => $this->ID));
+			if($row = $rs->fetch(PDO::FETCH_ASSOC))
+				return true;
+			else 
+				return false;
+		}
 		return $user->IsAdministrator;
 	}
 	
@@ -78,7 +92,7 @@ class Folder {
 	
 	public function GetChildren() {
 		$children = array();
-		$sql = "SELECT * FROM t_folders WHERE path = :path";
+		$sql = "SELECT * FROM pic_folders WHERE path = :path";
 		if($this->IsRoot())
 			$path = ROOT_NAME;
 		else 
