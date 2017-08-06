@@ -37,7 +37,15 @@ $folder = new Folder();
 				<input type="file" id="pic-uploadfiles" multiple="multiple" accept="image/*" />
 			</div>
 		</div>
+		<div class="progress">
+			<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+				0%
+ 			</div>
+		</div>
 		<div class="row pic-transfer">En attente de fichiers...</div>
+		<div class="row">
+			<div class="col-sm-12 pic-center"><button type="button" class="btn btn-warning" id="pic-back">Retour dossier</button></div>
+		</div>
 	</div>
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID; ?>" />
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>

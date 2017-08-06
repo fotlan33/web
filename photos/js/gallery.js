@@ -5,11 +5,19 @@ document.getElementById('pic-links').onclick = function (event) {
 				options = {	index: link,
 					event: event,
 					onslide: function (index, slide) {
+						// Download Icon
 						var sSource = this.list[index].getAttribute('data-pic-source'),
 							nSource = this.container.find('.download');
 						if (sSource) {
 							nSource[0].setAttribute('href', sSource);
 						}
+						// Edition Icon
+						var sEdit = this.list[index].getAttribute('data-pic-edit'),
+							nEdit = this.container.find('.edit');
+						if (sEdit) {
+							nEdit[0].setAttribute('href', sEdit);
+						}
+						// Date Display
 						var sDate = this.list[index].getAttribute('data-pic-date'),
 							nDate = this.container.find('.date');
 						nDate.empty();

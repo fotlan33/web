@@ -113,6 +113,35 @@
        -o-transform: translateZ(0);
           transform: translateZ(0);
 }
+.blueimp-gallery > .edit {
+  position: absolute;
+  top: 80px;
+  line-height: 30px;
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+  opacity: 0.8;
+  display: none;
+  padding: 15px;
+  right: 15px;
+  left: auto;
+  margin: -15px;
+  font-size: 20px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.blueimp-gallery > .edit:hover {
+  color: #fff;
+  opacity: 1;
+}
+.blueimp-gallery-controls > .edit {
+  display: block;
+  /* Fix z-index issues (controls behind slide element) on Android: */
+  -webkit-transform: translateZ(0);
+     -moz-transform: translateZ(0);
+      -ms-transform: translateZ(0);
+       -o-transform: translateZ(0);
+          transform: translateZ(0);
+}
 .blueimp-gallery > .date {
   position: absolute;
   top: 40px;

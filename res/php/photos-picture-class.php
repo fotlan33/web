@@ -3,11 +3,10 @@
 //+++++ Constants +++++
 define('HEIGHT_THUMB', '150');
 define('HEIGHT_PREVIEW', '600');
-define('PATH_DATA', '/var/data/photos/');
-//define('PATH_HOST', 'http://photos.fotlan.com/data/');
-define('PATH_HOST', 'http://photos.fotlan.com.s3-website-eu-west-1.amazonaws.com/data/');
 
 require_once 'ms.php';
+require_once 'aws.php';
+use Aws\S3\S3Client;
 
 //+++++ Class ++++++
 class Picture {
@@ -23,6 +22,8 @@ class Picture {
 	public	$Extension = '';
 	public	$Folder = 0;
 	private	$db = null;
+	private $s3 = null;
+	private $errors = '';
 
 	//----- Constructor -----
 	function __construct() {
@@ -36,49 +37,46 @@ class Picture {
 
 	//----- Methods ----- 
 	public function Open($PictureID) {
-		$sql = "SELECT * FROM pic_data WHERE id_picture = $PictureID";
-		if($rs = $this->db->query($sql)) {
-			$row = $rs->fetch_array();
+		$sql = "SELECT * FROM pic_data WHERE id_picture = :id";
+		$rs = $this->db->prepare($sql);
+		$rs->execute(array(':id' => $PictureID));
+		if($row = $rs->fetch(PDO::FETCH_ASSOC)) {
 			$this->ID = $PictureID;
 			$this->Label = $row['label'];
 			$this->Keywords = $row['keywords'];
 			$this->Width = $row['width'];
 			$this->Height = $row['height'];
 			$this->Size = $row['size'];
-			$this->Date = mb_substr($row['date'], 0, 10, 'UTF-8');
+			$this->Date = $row['date'];
 			$this->Extension = $row['extension'];
 			$this->Folder = $row['id_folder'];
 		}
 	}
 
 	public function Save() {
+		$data = array(	':label'		=> $this->Label,
+						':keywords'		=> $this->Keywords,
+						':width'		=> $this->Width,
+						':height'		=> $this->Height,
+						':size'			=> $this->Size,
+						':date'			=> $this->Date,
+						':extension'	=> $this->Extension,
+						':folder'		=> $this->Folder
+		);
 		if($this->ID == 0) {
-			$sql = "INSERT INTO pic_data SET
-				label = '" . msEscapeQuotes($this->Label, false) . "',
-				keywords = '" . msEscapeQuotes($this->Keywords, false) . "',
-				width = " . $this->Width . ",
-				height = " . $this->Height . ",
-				size = " . $this->Size . ",
-				date = '" . $this->Date . "',
-				extension = '" . $this->Extension . "',
-				id_folder = " . $this->Folder;
-			$this->db->query($sql);
-			$rs = $this->db->query("SELECT LAST_INSERT_ID()");
-			$this->ID = msRequestValue($rs);
-			$rs->free();
+			$sql = "INSERT INTO pic_data SET label = :label, keywords = :keywords, width = :width, height = :height,
+						size = :size, date = :date, extension = :extension, id_folder = :folder";
+			$rs = $this->db->prepare($sql);
+			$rs->execute($data);
+			$this->ID = $this->db->lastInsertId();
 		}
 		else {
-			$sql = "UPDATE pic_data SET
-				label = '" . msEscapeQuotes($this->Label, false) . "',
-				keywords = '" . msEscapeQuotes($this->Keywords, false) . "',
-				width = " . $this->Width . ",
-				height = " . $this->Height . ",
-				size = " . $this->Size . ",
-				date = '" . $this->Date . "',
-				extension = '" . $this->Extension . "',
-				id_folder = " . $this->Folder . "
-				WHERE id_picture = " . $this->ID;
-			$this->db->query($sql);
+			$sql = "UPDATE SET label = :label, keywords = :keywords, width = :width, height = :height,
+						size = :size, date = :date, extension = :extension, id_folder = :folder
+					WHERE id_picture = :id";
+			$data['id'] = $this->ID;
+			$rs = $this->db->prepare($sql);
+			$rs->execute($data);
 		}
 	}
 
@@ -86,68 +84,114 @@ class Picture {
 		$this->DeleteFile($this->Path() . $this->FileName('v'));
 		$this->DeleteFile($this->Path() . $this->FileName('p'));
 		$this->DeleteFile($this->Path() . $this->FileName('i'));
-		$sql = "DELETE FROM pic_data WHERE id_picture = " . $this->ID;
-		$this->db->query($sql);
+		$sql = "DELETE FROM pic_data WHERE id_picture = :id";
+		$rs = $this->db->prepare($sql);
+		$rs->execute(array(':id' => $this->ID));
 	}
 
-	public function BuildThumbnail() {
+	public function StoreInS3($Format, $SourceFilePath) {
+		if(is_null($this->s3)) {
+			if(!$this->GetS3Client())
+				return false;
+		}
+		$TargetFilePath = $this->Path() . $this->FileName($Format);
+		$result = $this->s3->putObject([
+				'Bucket'     => PHOTOS_BUCKET,
+				'Key'        => $TargetFilePath,
+				'SourceFile' => $SourceFilePath,
+				'ACL'        => 'public-read'
+		]);
+		return true;	//TODO : Catch errors
+	}
+
+	public function StoreThumbnail($SourceFilePath) {
 		$width_thumb = round(HEIGHT_THUMB * $this->Width / $this->Height);
-		$this->Resize($width_thumb, HEIGHT_THUMB, 'v');
+		$ThumbnailFilePath = $this->Resize($SourceFilePath, $width_thumb, HEIGHT_THUMB);
+		$this->StoreInS3('v', $ThumbnailFilePath);
+		unlink($ThumbnailFilePath);
 	}
 
-	public function BuildPreview() {
+	public function StorePreview($SourceFilePath) {
 		if($this->Height > HEIGHT_PREVIEW) {
 			$width_preview = round(HEIGHT_PREVIEW * $this->Width / $this->Height);
-			$this->Resize($width_preview, HEIGHT_PREVIEW, 'p');
+			$PreviewFilePath = $this->Resize($SourceFilePath, $width_preview, HEIGHT_PREVIEW, 'p');
+			$this->StoreInS3('p', $PreviewFilePath);
+			unlink($PreviewFilePath);
 		}
 		else
-			copy($this->Path() . $this->FileName('i'), $this->Path() . $this->FileName('p'));
+			$this->StoreInS3('p', $SourceFilePath);
 	}
 
-	private function Resize($NewWidth, $NewHeight, $sType) {
-		$imgFile = $this->Path() . $this->FileName('i');
-		list($imgWidth, $imgHeight, $imgTypeMime, $buf) = getimagesize($imgFile);
+	private function GetS3Client() {
+		$aws_conf = awsConfig();
+		if(is_null($aws_conf)) {
+			$this->SetError('Configuration AWS non disponible !');
+			return false;
+		} else {			
+			try {
+				$this->s3 = new S3Client([
+						'version'     	=> 'latest',
+						'region'      	=> 'eu-west-1',
+						'http'			=> ['verify' => CERT_FILE],
+						'credentials'	=> [
+								'key'		=> $aws_conf['aws.access.key_id'],
+								'secret'	=> $aws_conf['aws.secret.access.key'],
+						],
+				]);
+				return true;
+			} catch (S3Exception $e) {
+				echo 'Erreur AWS : ' . $e->getMessage();
+				return false;
+			}
+		}
+	}
+	
+	private function Resize($SourceFilePath, $NewWidth, $NewHeight) {
+		list($imgWidth, $imgHeight, $imgTypeMime, $buf) = getimagesize($SourceFilePath);
 		$imgTypeMime = image_type_to_mime_type($imgTypeMime);
 		if(strpos($imgTypeMime, 'image') !== false) {
 			$rsMemory = imagecreatetruecolor($NewWidth, $NewHeight);
 			switch($imgTypeMime)
 			{ 
 				case 'image/gif': 
-					$imgMemory = imagecreatefromgif($imgFile); 
+					$imgMemory = imagecreatefromgif($SourceFilePath); 
 					break; 
 				case 'image/png': 
-					$imgMemory = imagecreatefrompng($imgFile); 
+					$imgMemory = imagecreatefrompng($SourceFilePath); 
 					break; 
 				default: 
-					$imgMemory = imagecreatefromjpeg($imgFile); 
+					$imgMemory = imagecreatefromjpeg($SourceFilePath); 
 			}
 			imagecopyresampled($rsMemory, $imgMemory, 0, 0, 0, 0, $NewWidth, $NewHeight, $imgWidth, $imgHeight); 
-			$rsFile = $this->Path() . $this->FileName($sType);
+			$rsFile = tempnam(sys_get_temp_dir(), 'pic');
 			imagejpeg($rsMemory, $rsFile, 80);
-		}
+			return $rsFile;
+		} else 
+			return null;
 	}
 
 	public function Path() {
-		$path = PATH_DATA . mb_substr($this->Date, 0, 4, 'UTF-8');
-		if(!is_dir($path))
-			mkdir($path);
-		$path .= '/' . mb_substr($this->Date, 5, 2, 'UTF-8');
-		if(!is_dir($path))
-			mkdir($path);
-		return($path . '/');
+		return PHOTOS_ROOT. mb_substr($this->Date, 0, 4, 'UTF-8') . '/' . mb_substr($this->Date, 5, 2, 'UTF-8') . '/';
 	}
 
 	public function VirtualPath() {
-		return(PATH_HOST . mb_substr($this->Date, 0, 4, 'UTF-8') . '/' . mb_substr($this->Date, 5, 2, 'UTF-8') . '/');
+		return(PHOTOS_URL . mb_substr($this->Date, 0, 4, 'UTF-8') . '/' . mb_substr($this->Date, 5, 2, 'UTF-8') . '/');
 	}
 
 	public function FileName($sType) {
 		return($sType . substr((10000000 + $this->ID), 1, 7) . $this->Extension);
 	}
 
-	public function DeleteFile($sFileName) {
-		if(file_exists($sFileName))
-			unlink($sFileName);
+	public function DeleteFile($sFilePath) {
+		if(is_null($this->s3)) {
+			if(!$this->GetS3Client())
+				return false;
+		}
+		$result = $this->s3->deleteObject([
+				'Bucket'     => PHOTOS_BUCKET,
+				'Key'        => $sFilePath
+		]);
+		return true;	//TODO : Catch errors
 	}
 
 	public function NewDate($sDate) {
@@ -193,25 +237,12 @@ class Picture {
 		}
 	}
 
-	public function Display($sPosition)
-	{
-		echo ("<div class=\"$sPosition\">
-	<a href=\"" . $this->VirtualPath() . $this->FileName('p') . "\" class=\"highslide\" onclick=\"return(hs.expand(this));\">
-		<img src=\"" . $this->VirtualPath() . $this->FileName('v') . "\" alt=\"Photo\" title=\"Clic pour agrandir\" />
-	</a>
-	<div class=\"highslide-caption\">
-		<table class=\"wide_table\">
-			<tr>
-				<td class=\"preview_label\">" . htmlspecialchars($this->Label, ENT_QUOTES, 'UTF-8') . "</td>
-				<td class=\"preview_hq\"><a href=\"/photos/download.php?id=" . $this->ID . "\">HQ - " . $this->Size . " Ko</a></td>
-			</tr>
-			<tr>
-				<td class=\"preview_date\">" . msFormatShortDate($this->Date) . "</td>
-				<td class=\"preview_hq\">" . $this->Width . " x " . $this->Height . "</td>
-			</tr>
-		</table>
-	</div>
-</div>");
+	public function GetErrors() {
+		return $this->errors;
+	}
+	
+	private function SetError($NewError) {
+		$this->errors .= $NewError . "\n";
 	}
 }
 ?>
