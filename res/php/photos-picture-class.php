@@ -15,10 +15,10 @@ class Picture {
 	public	$ID = 0;
 	public	$Label = '';
 	public	$Keywords = '';
+	public	$Date = '';
 	public	$Width = 0;
 	public	$Height = 0;
 	public	$Size = 0;
-	public	$Date = '';
 	public	$Extension = '';
 	public	$Folder = 0;
 	private	$db = null;
@@ -50,6 +50,8 @@ class Picture {
 			$this->Date = $row['date'];
 			$this->Extension = $row['extension'];
 			$this->Folder = $row['id_folder'];
+		} else {
+			$this->SetError("Impossible de charger l'image " . $PictureID);
 		}
 	}
 
@@ -71,13 +73,16 @@ class Picture {
 			$this->ID = $this->db->lastInsertId();
 		}
 		else {
-			$sql = "UPDATE SET label = :label, keywords = :keywords, width = :width, height = :height,
+			$sql = "UPDATE pic_data SET label = :label, keywords = :keywords, width = :width, height = :height,
 						size = :size, date = :date, extension = :extension, id_folder = :folder
 					WHERE id_picture = :id";
 			$data['id'] = $this->ID;
 			$rs = $this->db->prepare($sql);
 			$rs->execute($data);
 		}
+		$log = $rs->errorInfo();
+		if(!is_null($log[1]))
+				$this->SetError($log[2]);
 	}
 
 	public function Delete() {
@@ -87,6 +92,9 @@ class Picture {
 		$sql = "DELETE FROM pic_data WHERE id_picture = :id";
 		$rs = $this->db->prepare($sql);
 		$rs->execute(array(':id' => $this->ID));
+		$log = $rs->errorInfo();
+		if(!is_null($log[1]))
+			$this->SetError($log[2]);
 	}
 
 	public function StoreInS3($Format, $SourceFilePath) {
@@ -95,28 +103,37 @@ class Picture {
 				return false;
 		}
 		$TargetFilePath = $this->Path() . $this->FileName($Format);
-		$result = $this->s3->putObject([
-				'Bucket'     => PHOTOS_BUCKET,
-				'Key'        => $TargetFilePath,
-				'SourceFile' => $SourceFilePath,
-				'ACL'        => 'public-read'
-		]);
-		return true;	//TODO : Catch errors
+		try {
+			$result = $this->s3->putObject([
+					'Bucket'     => PHOTOS_BUCKET,
+					'Key'        => $TargetFilePath,
+					'SourceFile' => $SourceFilePath,
+					'ACL'        => 'public-read'
+			]);
+			return true;
+		} catch (S3Exception $e) {
+			$this->SetError('Erreur AWS : ' . $e->getMessage());
+			return false;
+		}
 	}
 
 	public function StoreThumbnail($SourceFilePath) {
 		$width_thumb = round(HEIGHT_THUMB * $this->Width / $this->Height);
 		$ThumbnailFilePath = $this->Resize($SourceFilePath, $width_thumb, HEIGHT_THUMB);
-		$this->StoreInS3('v', $ThumbnailFilePath);
-		unlink($ThumbnailFilePath);
+		if(!is_null($ThumbnailFilePath)) {
+			$this->StoreInS3('v', $ThumbnailFilePath);
+			unlink($ThumbnailFilePath);
+		}
 	}
 
 	public function StorePreview($SourceFilePath) {
 		if($this->Height > HEIGHT_PREVIEW) {
 			$width_preview = round(HEIGHT_PREVIEW * $this->Width / $this->Height);
-			$PreviewFilePath = $this->Resize($SourceFilePath, $width_preview, HEIGHT_PREVIEW, 'p');
-			$this->StoreInS3('p', $PreviewFilePath);
-			unlink($PreviewFilePath);
+			$PreviewFilePath = $this->Resize($SourceFilePath, $width_preview, HEIGHT_PREVIEW);
+			if(!is_null($PreviewFilePath)) {
+				$this->StoreInS3('p', $PreviewFilePath);
+				unlink($PreviewFilePath);
+			}
 		}
 		else
 			$this->StoreInS3('p', $SourceFilePath);
@@ -140,7 +157,29 @@ class Picture {
 				]);
 				return true;
 			} catch (S3Exception $e) {
-				echo 'Erreur AWS : ' . $e->getMessage();
+				$this->SetError('Erreur AWS : ' . $e->getMessage());
+				return false;
+			}
+		}
+	}
+	
+	private function MoveS3File($SourceFilePath, $TargetFilePath) {
+		if($SourceFilePath != $TargetFilePath) {
+			if(is_null($this->s3)) {
+				if(!$this->GetS3Client())
+					return false;
+			}
+			try {
+				$result = $this->s3->copyObject([
+						'Bucket'     => PHOTOS_BUCKET,
+						'Key'        => $TargetFilePath,
+						'CopySource' => PHOTOS_BUCKET . '/' . $SourceFilePath,
+						'ACL'        => 'public-read'
+				]);
+				$this->DeleteFile($SourceFilePath);
+				return true;
+			} catch (S3Exception $e) {
+				$this->SetError('Erreur AWS : ' . $e->getMessage());
 				return false;
 			}
 		}
@@ -166,8 +205,10 @@ class Picture {
 			$rsFile = tempnam(sys_get_temp_dir(), 'pic');
 			imagejpeg($rsMemory, $rsFile, 80);
 			return $rsFile;
-		} else 
+		} else {
+			$this->SetError('Format image non supporté');
 			return null;
+		}
 	}
 
 	public function Path() {
@@ -175,7 +216,7 @@ class Picture {
 	}
 
 	public function VirtualPath() {
-		return(PHOTOS_URL . mb_substr($this->Date, 0, 4, 'UTF-8') . '/' . mb_substr($this->Date, 5, 2, 'UTF-8') . '/');
+		return(PHOTOS_HOST . $this->Path());
 	}
 
 	public function FileName($sType) {
@@ -187,11 +228,16 @@ class Picture {
 			if(!$this->GetS3Client())
 				return false;
 		}
-		$result = $this->s3->deleteObject([
-				'Bucket'     => PHOTOS_BUCKET,
-				'Key'        => $sFilePath
-		]);
-		return true;	//TODO : Catch errors
+		try {
+			$result = $this->s3->deleteObject([
+					'Bucket'     => PHOTOS_BUCKET,
+					'Key'        => $sFilePath
+			]);
+			return true;
+		} catch (S3Exception $e) {
+			$this->SetError('Erreur AWS : ' . $e->getMessage());
+			return false;
+		}
 	}
 
 	public function NewDate($sDate) {
@@ -201,40 +247,25 @@ class Picture {
 			$imgYear = mb_substr($sDate, 0, 4, 'UTF-8');
 			$imgMonth = mb_substr($sDate, 5, 2, 'UTF-8');
 			$imgDay = mb_substr($sDate, 8, 2, 'UTF-8');
-			if(checkdate($imgMonth, $imgDay, $imgYear))
+			if(checkdate(intval($imgMonth, 10), intval($imgDay, 10), intval($imgYear, 10)))
 				return("$imgYear-$imgMonth-$imgDay");
 			else
 				return($this->Today());
 		}
 	}
 
+	public function ChangeDate($sDate) {
+		$SourceFileThumbnail = $this->Path() . $this->FileName('v');
+		$SourceFilePreview = $this->Path() . $this->FileName('p');
+		$SourceFileImage = $this->Path() . $this->FileName('i');
+		$this->Date = $this->NewDate($sDate);
+		$this->MoveS3File($SourceFileThumbnail, $this->Path() . $this->FileName('v'));
+		$this->MoveS3File($SourceFilePreview, $this->Path() . $this->FileName('p'));
+		$this->MoveS3File($SourceFileImage, $this->Path() . $this->FileName('i'));
+	}
+	
 	private function Today() {
-		$today = getdate();
-		$imgYear = $today['year'];
-		$imgMonth = substr((100 + $today['mon']), 1, 2);
-		$imgDay = substr((100 + $today['mday']), 1, 2);
-		return("$imgYear-$imgMonth-$imgDay");
-	}
-
-	public function DateConversion($sType, $sDate) {
-		if($sType == 'fr')
-			return(mb_substr($sDate, 8, 2, 'UTF-8') . '/' . mb_substr($sDate, 5, 2, 'UTF-8') . '/' . mb_substr($sDate, 0, 4, 'UTF-8'));
-		else
-			return(mb_substr($sDate, 6, 4, 'UTF-8') . '-' . mb_substr($sDate, 3, 2, 'UTF-8') . '-' . mb_substr($sDate, 0, 2, 'UTF-8'));
-	}
-
-	public function TypeContent() {
-		switch($this->Extension) {
-			case '.gif':
-				return('image/gif');
-				break;
-			case '.png':
-				return('image/png');
-				break;
-			default:
-				return('image/jpeg');
-				break;
-		}
+		return(date('Y-m-d'));
 	}
 
 	public function GetErrors() {

@@ -66,6 +66,7 @@ $bEdit = $folder->IsManager($u);
 				echo "\t\t\t<a href=\"" . $pic->VirtualPath() . $pic->FileName('p')
 							. "\" title=\"" . htmlspecialchars($row['label'], ENT_QUOTES, 'UTF-8')
 							. "\" data-pic-source=\"" . $pic->VirtualPath() . $pic->FileName('i')
+							. "\" data-pic-info=\"" . $row['width'] . ' x ' . $row['height'] . ' - ' . $row['size'] . ' Ko'
 							. "\" data-pic-edit=\"picture.php?f=" . $folder->ID . "&id=" . $row['id_picture']
 							. "\" data-pic-date=\"" . msFormatShortDate($row['date']) . "\">";
 				echo "<img src=\"" . $pic->VirtualPath() . $pic->FileName('v') . "\" alt=\"" . htmlspecialchars($row['label'], ENT_QUOTES, 'UTF-8') . "\" /></a>\n";

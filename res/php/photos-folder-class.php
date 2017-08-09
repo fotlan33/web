@@ -74,7 +74,6 @@ class Folder {
 			else 
 				return false;
 		}
-		return $user->IsAdministrator;
 	}
 	
 	public function GetParent() {

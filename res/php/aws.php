@@ -5,7 +5,7 @@ require_once 'ms.php';
 require_once 'aws.phar';
 define('PHOTOS_BUCKET', 'photos.fotlan.com');
 define('PHOTOS_ROOT', 'data/');
-define('PHOTOS_URL', 'http://photos.fotlan.com.s3-website-eu-west-1.amazonaws.com/data/');
+define('PHOTOS_HOST', 'http://photos.fotlan.com.s3-website-eu-west-1.amazonaws.com/');
 define('PHOTOS_URL_ALIAS', 'http://photos.fotlan.com/');
 
 //+++++ Retrieve AWS configuration +++++

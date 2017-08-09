@@ -11,6 +11,7 @@ $folder = new Folder();
 $id = isset($_GET['id']) ? $_GET['id'] : 0;
 $pic = new Picture();
 $pic->Open($id);
+$db = msConnectDB();
 
 ?>
 <!DOCTYPE html>
@@ -40,9 +41,12 @@ $pic->Open($id);
 			<div class="col-sm-3 pic-center"><img src="<?= $pic->VirtualPath() . $pic->FileName('v') ?>" alt="Photo" /></div>
 			<div class="col-sm-9">
 				<form id="frm" class="form-horizontal">
-					<div class="form-group">
+					<div class="form-group" id="pic-description">
 						<label class="control-label col-sm-4" for="frm-description">Description :</label>
-						<div class="col-sm-8"><input type="text" class="form-control" id="frm-description" placeholder="Description" maxlength="100" value="<?= msSecureString($pic->Label) ?>" /></div>
+						<div class="col-sm-8">
+							<input type="text" class="form-control" id="frm-description" placeholder="Description" maxlength="100" value="<?= msSecureString($pic->Label) ?>" />
+							<span class="glyphicon form-control-feedback"></span>
+						</div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="frm-keywords">Mots-clés :</label>
@@ -70,16 +74,37 @@ $pic->Open($id);
 						<div class="col-sm-8"><input type="text" class="form-control" id="frm-size" placeholder="en Ko" maxlength="50" value="<?= msSecureString($pic->Size) ?>" /></div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="frm-size">Extension :</label>
-						<div class="col-sm-8"><input type="text" class="form-control" id="frm-size" placeholder=".jpg .png .gif" maxlength="10" value="<?= msSecureString($pic->Extension) ?>" /></div>
+						<label class="control-label col-sm-4" for="frm-extension">Extension :</label>
+						<div class="col-sm-8"><input type="text" class="form-control" id="frm-extension" placeholder=".jpg .png .gif" maxlength="10" value="<?= msSecureString($pic->Extension) ?>" /></div>
 					</div>
 					<div class="form-group">
 						<label class="control-label col-sm-4" for="frm-folder">Dossier :</label>
 						<div class="col-sm-8"><select class="form-control" id="frm-folder">
+<?php	
+	$sql = "SELECT * FROM pic_folders
+			WHERE id_folder > 1
+			ORDER BY CONCAT(path, '|', folder) ASC";
+	//TODO : Exclude folders where no rights
+	$rs = $db->query($sql);
+	mb_regex_encoding('UTF-8');
+	while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
+		// $parents = mb_split('|', $row['path']);
+		// $n = count($parents) - 1;
+		$n = substr_count($row['path'], '|');
+		$ident = '';
+		for($i = 0; $i < $n; $i++) {
+			$ident .= '&hellip;&hellip;';
+		}
+		echo "\t\t\t\t\t\t\t<option value=\"" . $row['id_folder'] . "\"";
+		if($row['id_folder'] == $pic->Folder)
+			echo " selected=\"selected\"";
+		echo ">" . $ident . "&nbsp;" . msSecureString($row['folder']) . "</option>\n";
+ 	}
+?>
 						</select></div>
 					</div>
 					<div class="col-sm-9 pic-center">
-						<button type="button" class="btn btn-warning">Enregistrer</button>&nbsp;
+						<button type="submit" class="btn btn-warning">Enregistrer</button>&nbsp;
 						<button type="button" class="btn btn-warning" id="pic-delete">Supprimer</button>&nbsp;
 						<button type="button" class="btn btn-warning" id="pic-back">Retour</button>
 					</div>
@@ -94,6 +119,6 @@ $pic->Open($id);
 	<script type="text/javascript" src="/res/js/bootstrap.datepicker-1.6.4.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap.datepicker.fr-1.6.4.min.js"></script>
 	<script type="text/javascript" src="/res/js/fotlan.js"></script>
-	<script type="text/javascript" src="js/photos.js"></script>
+	<script type="text/javascript" src="js/picture.js"></script>
 </body>
 </html>

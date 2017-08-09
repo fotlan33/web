@@ -9,14 +9,20 @@ require_once '../res/php/photos-picture-class.php';
 //+++++ Parameters +++++
 $u = new FotlanProfile();
 $folder = new Folder();
-$id = isset($_POST['id']) ? $_POST['id'] : 0;
 $pic = new Picture();
-$pic->Open($id);
 
 //+++++ Check autorization +++++
 if($folder->IsManager($u)) {
-	$pic->Delete();
+	$id = isset($_POST['id']) ? $_POST['id'] : 0;
+	$pic->Open($id);
+	if($pic->GetErrors() == '')
+		$pic->Delete();
+	if($pic->GetErrors() == '')
+		echo 'OK';
+	else
+		echo $pic->GetErrors();
+} else {
+	echo 'Accès refusé';
 }
 
-echo 'OK';
 ?>	
