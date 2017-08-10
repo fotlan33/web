@@ -74,16 +74,15 @@ $bEdit = $folder->IsManager($u);
 ?>
 		</div>
 <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls">
-    <div class="slides"></div>
-    <h3 class="title"></h3>
-    <h4 class="date"></h4>
-    <a class="prev">‹</a>
-    <a class="next">›</a>
-    <a class="close">×</a>
-    <a class="download"><span class="glyphicon glyphicon-cloud-download"></span></a>
-    <a class="edit"><span class="glyphicon glyphicon-pencil"></span></a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
+	<div class="slides"></div>
+	<h3 class="title"></h3>
+	<h4 class="date"></h4>
+	<a class="prev">‹</a>
+	<a class="next">›</a>
+	<a class="close">×</a>
+	<a class="download"><span class="glyphicon glyphicon-cloud-download"></span></a>
+<?php if($bEdit) echo "<a class=\"edit\"><span class=\"glyphicon glyphicon-pencil\"></span></a>"; ?>
+	<ol class="indicator"></ol>
 </div>
 <?php
 		if(count($subfolders) != 0)

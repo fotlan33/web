@@ -15,7 +15,7 @@ document.getElementById('pic-links').onclick = function (event) {
 										// Edition Icon
 										var sEdit = this.list[index].getAttribute('data-pic-edit'),
 											nEdit = this.container.find('.edit');
-										if (sEdit) {
+										if (sEdit && nEdit.length > 0) {
 											nEdit[0].setAttribute('href', sEdit);
 										}
 										// Date Display
