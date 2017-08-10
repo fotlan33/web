@@ -12,7 +12,7 @@ define('PHOTOS_URL_ALIAS', 'http://photos.fotlan.com/');
 function awsConfig() {
 	if(file_exists(CONFIG_FILE)) {
 		$_conf = parse_ini_file(CONFIG_FILE);
-		if(is_array($_conf) && array_key_exists('aws.access.key_id', $_conf) && array_key_exists('aws.secret.access.key', $_conf)) {
+		if(is_array($_conf) && array_key_exists('aws.access.key.id', $_conf) && array_key_exists('aws.secret.access.key', $_conf)) {
 			return $_conf;
 		} else {
 			return null;

@@ -151,7 +151,7 @@ class Picture {
 						'region'      	=> 'eu-west-1',
 						'http'			=> ['verify' => CERT_FILE],
 						'credentials'	=> [
-								'key'		=> $aws_conf['aws.access.key_id'],
+								'key'		=> $aws_conf['aws.access.key.id'],
 								'secret'	=> $aws_conf['aws.secret.access.key'],
 						],
 				]);
