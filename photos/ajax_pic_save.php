@@ -33,12 +33,22 @@ if($folder->IsManager($u)) {
 	
 	// Save
 	$pic->Save();
-	if($pic->GetErrors() == '')
-		echo 'OK';
-	else
-		echo $pic->GetErrors();
+	if($pic->GetErrors() == '') {
+		$response = array(	'type'	=> 'success',
+							'title'	=> 'Succès !',
+							'text'	=> 'Les informations ont été mises à jour.' );
+	} else {
+		$response = array(	'type'	=> 'error',
+							'title'	=> 'Erreur !',
+							'text'	=> $pic->GetErrors() );
+	}
 } else {
-	echo 'Accès refusé';
+	$response = array(	'type'	=> 'error',
+						'title'	=> 'Echec !',
+						'text'	=> 'Accès refusé.' );
 }
+
+// Send response
+echo json_encode($response);
 
 ?>	

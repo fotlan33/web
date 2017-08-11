@@ -18,11 +18,20 @@ if($folder->IsManager($u)) {
 	if($pic->GetErrors() == '')
 		$pic->Delete();
 	if($pic->GetErrors() == '')
-		echo 'OK';
+		$response = array(	'type'	=> 'success',
+							'title'	=> 'Succès !',
+							'text'	=> 'La photo a été supprimée.' );
 	else
-		echo $pic->GetErrors();
+		$response = array(	'type'	=> 'error',
+							'title'	=> 'Erreur !',
+							'text'	=> $pic->GetErrors() );
 } else {
-	echo 'Accès refusé';
+	$response = array(	'type'	=> 'error',
+						'title'	=> 'Echec !',
+						'text'	=> 'Accès refusé.' );
 }
+
+// Send response
+echo json_encode($response);
 
 ?>	

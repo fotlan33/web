@@ -5,15 +5,25 @@ $('#pic-back').click(function() {
 
 // Delete Button
 $('#pic-delete').click(function() {
-	if(confirm('Supprimer définitivement cette photo ?')) {
+	swal({	title: 'Confirmation.',
+			type: 'question',
+			text: 'Supprimer définitivement cette photo ?',
+			showCancelButton: true,
+			confirmButtonText: 'Oui',
+			cancelButtonText: 'Non'
+	}).then(function() {
 		$.post('ajax_pic_delete.php', {
 			f: $('#pic-folder-id').val(),
 			id: $('#pic-id').val()
 		}, function(data) {
-			alert('Photo supprimée.');
-			location.href = './?f=' + $('#pic-folder-id').val();
-		});		
-	}
+			var response = jQuery.parseJSON(data);
+			swal(response.title, response.text, response.type).then(function() {
+				location.href = './?f=' + $('#pic-folder-id').val();
+			}, function (dismiss) {
+				location.href = './?f=' + $('#pic-folder-id').val();
+			});
+		});						
+	});
 });
 
 // Init datepicker
@@ -46,8 +56,12 @@ $('#frm').submit(function(){
 			extension: $('#frm-extension').val(),
 			folder: $('#frm-folder').val()
 		}, function(data) {
-			alert('Informations mises à jour.');
-			location.href = './?f=' + $('#frm-folder').val();
+			var response = jQuery.parseJSON(data);
+			swal(response.title, response.text, response.type).then(function() {
+				location.href = './?f=' + $('#pic-folder-id').val();
+			}, function (dismiss) {
+				location.href = './?f=' + $('#pic-folder-id').val();
+			});
 		});
 	}
 	return false;

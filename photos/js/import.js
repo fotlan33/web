@@ -1,38 +1,39 @@
-var nImport = 0;
-var iImport = 0;
+/*
+ * jQuery File Upload Plugin JS Example
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2010, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * https://opensource.org/licenses/MIT
+ */
 
-var uploadfiles = document.querySelector('#pic-uploadfiles');
-uploadfiles.addEventListener('change', function () {
-    var files = this.files;
-    $('.pic-transfer').html('Téléchargements en cours. Merci de patienter...<br />');
-	$('.progress-bar').css('width', '0%').attr('aria-valuenow', 0).html('0%');
-    nImport = files.length;
-    iImport = 0;
-    for(var i=0; i<files.length; i++) {
-        uploadFile(this.files[i]);
-    }
-}, false);
+/* global $, window */
 
-$('#pic-back').click(function() {
-	location.href = './?f=' + $('#pic-folder-id').val();
+$(function () {
+    'use strict';
+
+    // Initialize the jQuery File Upload widget:
+    $('#fileupload').fileupload({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+        url: '/photos/upload.php'
+    });
+
+    // Load existing files:
+    $('#fileupload').addClass('fileupload-processing');
+    $.ajax({
+        // Uncomment the following to send cross-domain cookies:
+        //xhrFields: {withCredentials: true},
+        url: $('#fileupload').fileupload('option', 'url'),
+        dataType: 'json',
+        context: $('#fileupload')[0]
+    }).always(function () {
+        $(this).removeClass('fileupload-processing');
+    }).done(function (result) {
+        $(this).fileupload('option', 'done')
+            .call(this, $.Event('done'), {result: result});
+    });
+
 });
-
-function uploadFile(file){
-    var url = 'ajax_upload.php';
-    var xhr = new XMLHttpRequest();
-    var fd = new FormData();
-    xhr.open('POST', url, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-        	iImport++;
-        	valeur = Math.round(iImport * 100 / nImport);
-        	$('.pic-transfer').html($('.pic-transfer').html() + xhr.responseText);
-        	$('.progress-bar').css('width', valeur + '%').attr('aria-valuenow', valeur).html(valeur + '%');
-        	if(iImport == nImport)
-        		location.href = './?f=' + $('#pic-folder-id').val();
-        }
-    };
-    fd.append('f', $('#pic-folder-id').val());
-    fd.append('pic-uploadfile', file);
-    xhr.send(fd);
-}

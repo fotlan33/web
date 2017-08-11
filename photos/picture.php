@@ -22,6 +22,7 @@ $db = msConnectDB();
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" type="text/css" href="/res/css/bootstrap-3.3.7.min.css" />
 	<link rel="stylesheet" type="text/css" href="/res/css/bootstrap.datepicker3-1.6.4.min.css" />
+	<link rel="stylesheet" type="text/css" href="/res/css/sweetalert2-6.6.7.min.css" />
 	<link rel="stylesheet" type="text/css" href="/res/css/fotlan.css" />
 	<link rel="stylesheet" type="text/css" href="css/photos.css" />
 </head>
@@ -118,6 +119,7 @@ $db = msConnectDB();
 	<script type="text/javascript" src="/res/js/bootstrap-3.3.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap.datepicker-1.6.4.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap.datepicker.fr-1.6.4.min.js"></script>
+	<script type="text/javascript" src="/res/js/sweetalert2-6.6.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/fotlan.js"></script>
 	<script type="text/javascript" src="js/picture.js"></script>
 </body>
