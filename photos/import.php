@@ -33,7 +33,7 @@ $folder = new Folder();
 		<div class="row">
 			<div class="col-sm-12 pic-center"><div class="pic-title">Importer des photos</div></div>
 		</div>
-	    <form id="fileupload" action="//jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
+	    <form id="fileupload" method="POST" enctype="multipart/form-data">
 	        <div class="row fileupload-buttonbar">
 	            <div class="col-lg-7">
 	                <span class="btn btn-success fileinput-button">
@@ -61,6 +61,9 @@ $folder = new Folder();
 	        </div>
 	        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
 	    </form>
+		<div class="row">
+			<div class="col-sm-12 pic-center"><button type="button" class="btn btn-warning" id="pic-back"><i class="glyphicon glyphicon-arrow-left"></i> Retour</button></div>
+		</div>
 	</div>
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID; ?>" />
 <!-- The template to display files available for upload -->
@@ -75,7 +78,7 @@ $folder = new Folder();
             <strong class="error text-danger"></strong>
         </td>
         <td>
-            <p class="size">Processing...</p>
+            <p class="size">Traitement...</p>
             <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
         </td>
         <td>
@@ -108,11 +111,7 @@ $folder = new Folder();
         </td>
         <td>
             <p class="name">
-                {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
-                {% } else { %}
                     <span>{%=file.name%}</span>
-                {% } %}
             </p>
             {% if (file.error) { %}
                 <div><span class="label label-danger">Erreur</span> {%=file.error%}</div>
@@ -123,9 +122,9 @@ $folder = new Folder();
         </td>
         <td>
             {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
-                    <i class="glyphicon glyphicon-trash"></i>
-                    <span>Supprimer</span>
+                <button class="btn btn-info" data-type="FINALIZE" data-filename="{%=file.name%}">
+                    <i class="glyphicon glyphicon-refresh"></i>
+                    <span>Finalisation...</span>
                 </button>
             {% } else { %}
                 <button class="btn btn-warning cancel">

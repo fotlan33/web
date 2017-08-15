@@ -14,8 +14,8 @@ $pswd = msEscapeQuotes($_POST['pswd'], false);
 if($user == '') {
 
 	//+++++ Delete Cookie +++++
-	setcookie('username', 'x', mktime(0, 0, 0, 1, 1, 1975), '/');
-	setcookie('admin', '0', mktime(0, 0, 0, 1, 1, 1975), '/');
+	setcookie('username', 'x', 100, '/');
+	setcookie('admin', '0', 100, '/');
 	$response = 'Yes';
 
 } else {
@@ -30,8 +30,9 @@ if($user == '') {
 
 	//+++++ Set Cookie +++++
 	if($row = $rs->fetch(PDO::FETCH_ASSOC)) {
-		setcookie('username', $row['login'], mktime(0, 0, 0, 1, 1, 2075), '/');
-		setcookie('admin', $row['admin'], mktime(0, 0, 0, 1, 1, 2075), '/');
+		$expire_time = time() + 60 * 60 * 24 * 365 * 5;		// Cookie expire dans 5 ans
+		setcookie('username', $row['login'], $expire_time, '/');
+		setcookie('admin', $row['admin'], $expire_time, '/');
 		$response = 'Yes';
 	}
 	else

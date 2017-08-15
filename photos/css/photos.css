@@ -51,6 +51,10 @@
 	text-align: center;
 	color: #808080;
 }
+.pic-panel {
+	font-weight: bold;
+	font-size: 18px;
+}
 .pic-transfer {
 	padding: 10px;
 	border: #afab8e 1px dashed;

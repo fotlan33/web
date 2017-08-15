@@ -28,7 +28,7 @@ $(document).ready(function() {
 
 	// Edit menu
 	$('#pic-menu-edit.pic-menu').click(function() {
-		location.href = 'edit.php/?f=' + $('#pic-folder-id').val();
+		location.href = 'folder.php?f=' + $('#pic-folder-id').val();
 	});
 
 });
