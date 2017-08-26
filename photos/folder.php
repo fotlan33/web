@@ -67,16 +67,45 @@ $db = msConnectDB();
 ?>
 							</select></div>
 						</div>
-						
 						<div class="col-sm-12 pic-center">
-							<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-repeat"></i> Renommer</button>&nbsp;
-							<button type="button" class="btn btn-info" id="pic-add"><i class="glyphicon glyphicon-plus"></i> Sous-dossier</button>&nbsp;
-							<button type="button" class="btn btn-danger" id="pic-delete"><i class="glyphicon glyphicon-trash"></i> Supprimer</button>&nbsp;
-							<button type="button" class="btn btn-warning" id="pic-back"><i class="glyphicon glyphicon-arrow-left"></i> Retour</button>
+							<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-repeat"></i><span class="hidden-xs"> Renommer</span></button>&nbsp;
+							<button type="button" class="btn btn-info" id="pic-add"><i class="glyphicon glyphicon-plus"></i><span class="hidden-xs"> Sous-dossier</span></button>&nbsp;
+							<button type="button" class="btn btn-danger" id="pic-delete"><i class="glyphicon glyphicon-trash"></i><span class="hidden-xs"> Supprimer</span></button>&nbsp;
+							<button type="button" class="btn btn-warning" id="pic-back"><i class="glyphicon glyphicon-arrow-left"></i><span class="hidden-xs"> Retour</span></button>
 						</div>
 					</form>
 				</div>
 			</div>
+<?php
+if($u->IsAdministrator) {
+	echo "
+			<div class=\"panel panel-warning\">
+				<div class=\"panel-heading pic-panel\">Gestionnaires</div>
+				<div class=\"panel-body\">";
+	$sql = "SELECT id_right, login FROM pic_rights
+			WHERE id_folder = :folder
+			ORDER BY login ASC, id_right ASC";
+	$rs = $db->prepare($sql);
+	$rs->execute(array(':folder' => $folder->ID));
+	while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
+		echo "
+					<div class=\"row pic-pad5\">
+						<div class=\"col-xs-6 pic-auth pic-vcenter\">" . $row['login'] . "</div><div class=\"col-xs-6 pic-vcenter\">
+							<button class=\"btn btn-danger pic-auth-button\" data-auth=\"" . $row['id_right'] . "\">
+								<i class=\"glyphicon glyphicon-trash\"></i>
+								<span class=\"hidden-xs\">Supprimer</span>
+							</button>
+						</div>
+					</div>";
+	}
+	echo "
+					<div class=\"col-xs-12 pic-center\">
+						<button type=\"button\" class=\"btn btn-info\" id=\"pic-add-auth\"><i class=\"glyphicon glyphicon-plus\"></i><span class=\"hidden-xs\"> Ajouter</span></button>
+					</div>
+				</div>
+			</div>
+";
+} ?>
 		</div>
 	</div>
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID ?>" />

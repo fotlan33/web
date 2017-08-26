@@ -82,7 +82,6 @@ $bEdit = $folder->IsManager($u);
 	<a class="close">×</a>
 	<a class="download"><span class="glyphicon glyphicon-cloud-download"></span></a>
 <?php if($bEdit) echo "<a class=\"edit\"><span class=\"glyphicon glyphicon-pencil\"></span></a>"; ?>
-	<ol class="indicator"></ol>
 </div>
 <?php
 		if(count($subfolders) != 0)

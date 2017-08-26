@@ -13,13 +13,61 @@ $('#pic-delete').click(function() {
 			cancelButtonText: 'Non'
 	}).then(function() {
 		$.post('ajax_folder_delete.php', {
-			f: $('#pic-folder-id').val(),
+			f: $('#pic-folder-id').val()
 		}, function(data) {
 			var response = jQuery.parseJSON(data);
 			swal(response.title, response.text, response.type).then(function() {
 				location.href = './?f=' + $('#pic-parent-id').val();
 			});
-		});						
+		});
+	});
+});
+
+//Delete Authorization Button
+$('.pic-auth-button').click(function() {
+	id_auth = $(this).attr('data-auth');
+	swal({	title: 'Confirmation.',
+			type: 'question',
+			text: 'Supprimer définitivement ce gestionnaire ?',
+			showCancelButton: true,
+			confirmButtonText: 'Oui',
+			cancelButtonText: 'Non'
+	}).then(function() {
+		$.post('ajax_auth_delete.php', {
+			f: $('#pic-folder-id').val(),
+			id: id_auth
+		}, function(data) {
+			var response = jQuery.parseJSON(data);
+			swal(response.title, response.text, response.type).then(function() {
+				location.href = 'folder.php?f=' + $('#pic-folder-id').val();
+			});
+		});
+	});
+});
+
+//Add Authorization Button
+$('#pic-add-auth').click(function() {
+	swal({	title: 'Nouveau gestionnaire.',
+			type: 'question',
+			input: 'text',
+			inputPlaceholder: 'Login du gestionnaire',
+			showCancelButton: true,
+			confirmButtonText: 'Ajouter',
+			cancelButtonText: 'Annuler'
+	}).then(function(text) {
+		$.post('ajax_auth_add.php', {
+			f: $('#pic-folder-id').val(),
+			login: text,
+		}, function(data) {
+			var response = jQuery.parseJSON(data);
+			if(response.type == 'success') {
+				swal(response.title, response.text, response.type).then(function() {
+					location.href = 'folder.php?f=' + response.id;
+				});
+			} else {
+				swal(response.title, response.text, response.type);
+			}
+		});
 	});
 });
 

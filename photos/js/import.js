@@ -16,16 +16,12 @@ $(function () {
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
-        // Uncomment the following to send cross-domain cookies:
-        //xhrFields: {withCredentials: true},
         url: '/photos/ajax-upload.php'
     });
 
     // Load existing files:
     $('#fileupload').addClass('fileupload-processing');
     $.ajax({
-        // Uncomment the following to send cross-domain cookies:
-        //xhrFields: {withCredentials: true},
         url: $('#fileupload').fileupload('option', 'url'),
         dataType: 'json',
         context: $('#fileupload')[0]
@@ -37,8 +33,6 @@ $(function () {
     });
 
     $('#fileupload').bind('fileuploadcompleted', function (e, data) {
-    	/* ... */
-    	//alert(JSON.stringify(data.result));
     	var i = 0;
     	for(i = 0; i < data.result.files.length; i++) {
     		$.post('ajax_move2s3.php', {
@@ -53,24 +47,13 @@ $(function () {
     				$('button[data-filename="' + response.file + '"]').html('<i class="glyphicon glyphicon-ban-circle"></i><span>&nbsp;Erreur</span>Fait');
     				$('button[data-filename="' + response.file + '"]').removeClass('btn-info').addClass('btn-danger');
     			}
-    			//alert(response.type);
-    			//alert(response.text);
     		});
     	}
-    	/*
-    	if(typeof(data.result.files) === 'object') {
-    		if(Array.isArray(data.result.files)) {
-    			if(data.result.files.length > 0) {
-    				
-    			}
-    		}
-    	}*/
     })
 });
 
 //Back Button
 $('#pic-back').click(function() {
-	//alert($('button[data-filename="IMG_20170815_151914.jpg"]').html());
 	location.href = './?f=' + $('#pic-folder-id').val();
 });
 

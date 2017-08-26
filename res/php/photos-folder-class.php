@@ -61,7 +61,7 @@ class Folder {
 	}
 
 	public function IsManager($User) {
-		if($User->GetRight($this->db, 'PHOTOS') == 'RW') {
+		if($User->CheckAuthorization('PHOTOS', 'RW')) {
 			return true;
 		} else {
 			$sql = "SELECT id_right FROM pic_rights
@@ -91,7 +91,7 @@ class Folder {
 	
 	public function GetChildren() {
 		$children = array();
-		$sql = "SELECT * FROM pic_folders WHERE path = :path";
+		$sql = "SELECT * FROM pic_folders WHERE path = :path ORDER BY folder ASC";
 		if($this->IsRoot())
 			$path = ROOT_NAME;
 		else 

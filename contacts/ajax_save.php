@@ -12,7 +12,7 @@ $response = array(	'id'		=> 0,
 					'err_text'	=> 'ERREUR : Non autorisé' );
 
 //+++++ Check autorization +++++
-if($u->GetRight($db, 'CONTACTS') == 'RW') {
+if($u->CheckAuthorization('CONTACTS', 'RW')) {
 
 	// +++++ Retrieve data +++++
 	$id = (isset($_POST['id']) && trim($_POST['id']) != '') ? trim($_POST['id']) : 0;

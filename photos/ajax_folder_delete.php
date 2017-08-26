@@ -25,11 +25,15 @@ if($folder->IsManager($u)) {
 		$rs2->execute(array(':path' => $folder->Path . '|' . $folder->Name));
 		$row2 = $rs2->fetch(PDO::FETCH_ASSOC);
 		if($row2['nbf'] == 0) {
-			// OK we can try to delete
-			$sql = "DELETE FROM pic_folders WHERE id_folder = :id";
+			// OK first we delete authorizations
+			$sql = "DELETE FROM pic_rights WHERE id_folder = :id";
 			$rs3 = $db->prepare($sql);
 			$rs3->execute(array(':id' => $folder->ID));
-			$log = $rs3->errorInfo();
+			// Now we can try to delete folder
+			$sql = "DELETE FROM pic_folders WHERE id_folder = :id";
+			$rs4 = $db->prepare($sql);
+			$rs4->execute(array(':id' => $folder->ID));
+			$log = $rs4->errorInfo();
 			if(is_null($log[1]))
 				$response = array(	'type'	=> 'success',
 									'title'	=> 'Succès !',

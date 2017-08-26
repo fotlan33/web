@@ -8,12 +8,13 @@ header('Content-Type: text/xml');
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
 //+++++ Parameters +++++
-$user = msEscapeQuotes($_POST['user'], false);
-$pswd = msEscapeQuotes($_POST['pswd'], false);
+$user = isset($_POST['user']) ? trim($_POST['user']) : '';
+$pswd = isset($_POST['pswd']) ? trim($_POST['pswd']) : '';
 
 if($user == '') {
 
 	//+++++ Delete Cookie +++++
+	$expire_time = time() - 60 * 60;		// Cookie a expire il y a une heure
 	setcookie('username', 'x', 100, '/');
 	setcookie('admin', '0', 100, '/');
 	$response = 'Yes';

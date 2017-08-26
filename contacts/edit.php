@@ -1,8 +1,8 @@
 <?php
 
 //+++++ Include +++++
-require_once '../res/php/profile-class.php';
 require_once '../res/php/ms.php';
+require_once '../res/php/profile-class.php';
 
 //+++++ Parameters +++++
 $u = new FotlanProfile();
@@ -211,7 +211,7 @@ if($titre == '')
 					<div class="col-sm-10"><textarea class="form-control" id="frm-remarques"><?= msSecureString($row['remarques']) ?></textarea></div>
 				</div>
 				<div id="frm-alert" class="alert alert-block alert-success ctc-alert col-sm-12"></div>
-<?php if($u->GetRight($db, 'CONTACTS') == 'RW') echo '				<div class="col-sm-offset-2 col-sm-10"><button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-save"></span> Enregistrer</button></div>';?>
+<?php if($u->CheckAuthorization('CONTACTS', 'RW')) echo '				<div class="col-sm-offset-2 col-sm-10"><button type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-save"></span> Enregistrer</button></div>';?>
 				<input type="hidden" id="frm-id" value="<?= msSecureString($row['id_contact']) ?>" />
 			</form>
 		</div>

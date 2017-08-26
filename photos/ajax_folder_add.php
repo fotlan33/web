@@ -23,7 +23,12 @@ if($folder->IsManager($u)) {
 	$log = $rs->errorInfo();
 	if(is_null($log[1])) {
 		$id = $db->lastInsertId();
-		// TODO : propagation des droits
+		// Propagate authorizations
+		$sql = "INSERT INTO pic_rights (login, id_folder)
+				SELECT login, :id FROM pic_rights WHERE id_folder = :folder";
+		$rs2 = $db->prepare($sql);
+		$rs2->execute(array(':id' => $id, ':folder' => $folder->ID));
+		// Response
 		$response = array(	'id'	=> $id,
 							'type'	=> 'success',
 							'title'	=> 'Succès !',

@@ -86,7 +86,15 @@
   opacity: 0;
   cursor: pointer;
 }
-
+.pic-auth {
+	font-weight: bold;
+	text-align: right;
+}
+.pic-vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
 /* ===== Blueimp Gallery Custom CSS Styles ===== */
 .blueimp-gallery > .title {
 	white-space: nowrap;
