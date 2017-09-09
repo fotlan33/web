@@ -19,17 +19,7 @@ if($folder->IsManager($u)) {
 	// Update data
 	$pic->Label = msFormatString($_POST['label'], null, 100);
 	$pic->Keywords = msFormatString($_POST['keywords'], null, 255);
-	$pic->Extension = msFormatString($_POST['extension'], null, 10);
-	$pic->Width = intval('0' . $_POST['width'], 10);
-	$pic->Height = intval('0' . $_POST['height'], 10);
-	$pic->Size = intval('0' . $_POST['size'], 10);
 	$pic->Folder = intval('0' . $_POST['folder'], 10);
-	
-	// Check date
-	$newDate = $pic->NewDate(msFormatMysqlDate($_POST['date'], date('Y-m-d')));
-	if($newDate != $pic->Date) {
-		$pic->ChangeDate($newDate);
-	}
 	
 	// Save
 	$pic->Save();

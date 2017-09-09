@@ -54,7 +54,7 @@ $('#frm').submit(function(){
 			height: $('#frm-height').val(),
 			size: $('#frm-size').val(),
 			extension: $('#frm-extension').val(),
-			folder: $('#frm-folder').val()
+			folder: $('#frm-folder-value').val()
 		}, function(data) {
 			var response = jQuery.parseJSON(data);
 			swal(response.title, response.text, response.type).then(function() {

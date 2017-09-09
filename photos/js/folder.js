@@ -23,7 +23,7 @@ $('#pic-delete').click(function() {
 	});
 });
 
-//Delete Authorization Button
+// Delete Authorization Button
 $('.pic-auth-button').click(function() {
 	id_auth = $(this).attr('data-auth');
 	swal({	title: 'Confirmation.',
@@ -45,7 +45,7 @@ $('.pic-auth-button').click(function() {
 	});
 });
 
-//Add Authorization Button
+// Add Authorization Button
 $('#pic-add-auth').click(function() {
 	swal({	title: 'Nouveau gestionnaire.',
 			type: 'question',
@@ -71,7 +71,7 @@ $('#pic-add-auth').click(function() {
 	});
 });
 
-//Add Button
+// Add Button
 $('#pic-add').click(function() {
 	swal({	title: 'Nouveau sous-dossier.',
 			type: 'question',
@@ -108,7 +108,7 @@ $('#frm-nommage').submit(function(){
 		$('#frm-nom').focus();
 	} else {
 		
-		// Save picture
+		// Save folder
 		$.post('ajax_folder_save.php', {
 			f: $('#pic-folder-id').val(),
 			nom: $('#frm-nom').val(),
@@ -123,4 +123,39 @@ $('#frm-nommage').submit(function(){
 		});
 	}
 	return false;
+});
+
+// Duplicate description value
+$('.pic-dup-description').click(function() {
+	txt = $(this).parent().parent().find('input[name="frm-description"]').val();
+	$('input[name="frm-description"]').val(txt);
+});
+
+// Duplicate keywords value
+$('.pic-dup-keywords').click(function() {
+	txt = $(this).parent().parent().find('input[name="frm-keywords"]').val();
+	$('input[name="frm-keywords"]').val(txt);
+});
+
+// Duplicate folder value
+$('.pic-dup-folder').click(function() {
+	txt = $(this).parent().parent().find('input[name="frm-folder-name"]').val();
+	$('input[name="frm-folder-name"]').val(txt);
+	value = $(this).parent().parent().find('input[name="frm-folder-value"]').val();
+	$('input[name="frm-folder-value"]').val(value);
+});
+
+// Picture Save Button
+$('.frm-pic-save-button').click(function() {
+	pic_root = $(this).parent().parent();
+	$.post('ajax_pic_update.php', {
+		f: $('#pic-folder-id').val(),
+		id: pic_root.find('input[name="frm-pic-id"]').val(),
+		label: pic_root.find('input[name="frm-description"]').val(),
+		keywords: pic_root.find('input[name="frm-keywords"]').val(),
+		folder: pic_root.find('input[name="frm-folder-value"]').val()
+	}, function(data) {
+		var response = jQuery.parseJSON(data);
+		swal(response.title, response.text, response.type);
+	});
 });

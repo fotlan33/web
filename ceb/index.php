@@ -40,7 +40,7 @@ $u = new FotlanProfile();
 			<div class="col-xs-4 col-sm-4 col-md-2 ceb-center"><div id="c6" class="ceb-card"></div></div>
 		</div>
 		<div class="row">
-			<div class="col-lg-12 ceb-center"><button type="button" class="btn btn-warning" onclick="javascript:Tirage();">Nouveau tirage</button></div>
+			<div class="col-lg-12 ceb-center"><button type="button" class="btn btn-primary" onclick="javascript:Tirage();"><i class="glyphicon glyphicon-refresh"></i> Nouveau tirage</button></div>
 		</div>
 	</div>
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>

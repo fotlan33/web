@@ -29,7 +29,7 @@ $u = new FotlanProfile();
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="https://mail.google.com/"><img src="img/gmail.png" alt="Fotlan GMail" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="https://www.qwant.com/"><img src="img/qwant.png" alt="Qwant" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://home.fotlan.com/mp/"><img src="img/music.png" alt="Fotlan Player" /></a></div>
-			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://home.fotlan.com/photos/"><img src="img/camera.png" alt="Phototh&egrave;que" /></a></div>
+			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="/photos/"><img src="img/camera.png" alt="Phototh&egrave;que" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://home.fotlan.com/vtt/"><img src="img/vtt.png" alt="Traces VTT" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://home.fotlan.com/banque/"><img src="img/banque.png" alt="Comptes bancaires" /></a></div>
 			<div class="col-xs-4 col-sm-3 col-md-2 hp-bloc"><a class="hp-link" href="http://home.fotlan.com/radios/"><img src="img/radio.png" alt="Radios" title="Radios" /></a></div>

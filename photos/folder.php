@@ -45,30 +45,17 @@ $db = msConnectDB();
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-sm-4" for="frm-parent">Dossier parent :</label>
-							<div class="col-sm-8"><select class="form-control" id="frm-parent">
-<?php	
-	echo "\t\t\t\t\t\t\t<option value=\"" . ROOT_ID . "\">" . ROOT_NAME . "</option>\n";
-	$sql = "SELECT * FROM pic_folders
-			WHERE id_folder > 1
-			ORDER BY CONCAT(path, '|', folder) ASC";
-	$rs = $db->query($sql);
-	while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
-		$n = 1 + substr_count($row['path'], '|');
-		$ident = '';
-		for($i = 0; $i < $n; $i++) {
-			$ident .= '&hellip;&hellip;';
-		}
-		echo "\t\t\t\t\t\t\t<option value=\"" . $row['id_folder'] . "\"";
-		if($row['id_folder'] == $parent->ID)
-			echo " selected=\"selected\"";
-		echo ">" . $ident . "&nbsp;" . msSecureString($row['folder']) . "</option>\n";
- 	}
-?>
-							</select></div>
+							<label class="control-label col-sm-4" for="frm-parent-name">Dossier parent :</label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></span>
+									<input type="text" class="form-control pic-folder-name" id="frm-parent-name" placeholder="sélectionne un dossier" value="<?= $parent->Name ?>" />
+								</div>
+								<input type="hidden" id="frm-parent" data-pic="folder" value="<?= $parent->ID?>" />
+							</div>
 						</div>
 						<div class="col-sm-12 pic-center">
-							<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-repeat"></i><span class="hidden-xs"> Renommer</span></button>&nbsp;
+							<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i><span class="hidden-xs"> Renommer</span></button>&nbsp;
 							<button type="button" class="btn btn-info" id="pic-add"><i class="glyphicon glyphicon-plus"></i><span class="hidden-xs"> Sous-dossier</span></button>&nbsp;
 							<button type="button" class="btn btn-danger" id="pic-delete"><i class="glyphicon glyphicon-trash"></i><span class="hidden-xs"> Supprimer</span></button>&nbsp;
 							<button type="button" class="btn btn-warning" id="pic-back"><i class="glyphicon glyphicon-arrow-left"></i><span class="hidden-xs"> Retour</span></button>
@@ -106,14 +93,89 @@ if($u->IsAdministrator) {
 			</div>
 ";
 } ?>
+			<div class="panel panel-warning">
+				<div class="panel-heading pic-panel">Photos</div>
+				<div class="panel-body">
+					<form id="frm-photos" class="form-horizontal">
+<?php 
+$sql = "SELECT id_picture, label, date, extension, keywords
+		FROM pic_data
+		WHERE id_folder = :folder
+		ORDER BY date DESC, id_picture DESC";
+$rs = $db->prepare($sql);
+$rs->execute(array(':folder' => $folder->ID));
+while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
+	$pic = new Picture();
+	$pic->ID = $row['id_picture'];
+	$pic->Date = $row['date'];
+	$pic->Extension = $row['extension'];
+?>
+						<div class="row pic-separator">
+							<div class="col-sm-3 pic-center"><img src="<?= $pic->VirtualPath() . $pic->FileName('v') ?>" alt="Photo" /></div>
+							<div class="col-sm-9">
+								<div class="form-group">
+									<label class="col-sm-4 control-label">Description :</label>
+									<div class="col-sm-8">
+										<div class="input-group">
+											<input type="text" class="form-control" name="frm-description" placeholder="Description" maxlength="100" value="<?= msSecureString($row['label']) ?>" />
+											<span class="input-group-addon pic-dup-description"><i class="glyphicon glyphicon-duplicate"></i></span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label">Mots-clés :</label>
+									<div class="col-sm-8">
+										<div class="input-group">
+											<input type="text" class="form-control" name="frm-keywords" placeholder="neige ski montagne..." maxlength="255" value="<?= msSecureString($row['keywords']) ?>" />
+											<span class="input-group-addon pic-dup-keywords"><i class="glyphicon glyphicon-duplicate"></i></span>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-4 control-label">Dossier :</label>
+									<div class="col-sm-8">
+										<div class="input-group">
+											<span class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></span>
+											<input type="text" class="form-control pic-folder-name" name="frm-folder-name" placeholder="sélectionne un dossier" value="<?= $folder->Name ?>" />
+											<span class="input-group-addon pic-dup-folder"><i class="glyphicon glyphicon-duplicate"></i></span>
+										</div>
+										<input type="hidden" name="frm-folder-value" data-pic="folder" data-pic="folder" value="<?= $folder->ID ?>" />
+									</div>
+								</div>
+								<div class="col-sm-12 pic-center">
+									<button type="button" class="btn btn-primary frm-pic-save-button"><i class="glyphicon glyphicon-ok"></i> Enregistrer</button>
+									<input type="hidden" name="frm-pic-id" value="<?= $pic->ID ?>" />
+								</div>
+							</div>
+						</div>
+<?php } ?>
+					</form>
+				</div>
+			</div>
 		</div>
 	</div>
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID ?>" />
 	<input type="hidden" id="pic-parent-id" value="<?= $parent->ID ?>" />
+	<!-- ========== Selection d'un dossier ========== -->
+	<div class="modal fade" id="pic-folder-selector">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div id="pic-folder-list">Contenu</div>
+					<div class="pic-center">
+						<button class="btn btn-primary" id="pic-folder-select"><i class="glyphicon glyphicon-ok"></i> Sélectionner</button>
+						<button class="btn btn-warning" data-dismiss="modal"><i class="glyphicon glyphicon-ban-circle"></i> Annuler</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- =================================== -->
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap-3.3.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/sweetalert2-6.6.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/fotlan.js"></script>
 	<script type="text/javascript" src="js/folder.js"></script>
+	<script type="text/javascript" src="js/folder_selector.js"></script>
 </body>
 </html>

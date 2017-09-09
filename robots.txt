@@ -1,4 +1,3 @@
-# robots, scram
-
-User-agent:	*
-Disallow:	/
+User-agent: *
+Allow: /cv/
+Disallow: /

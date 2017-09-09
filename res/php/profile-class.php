@@ -54,8 +54,8 @@ $Message<a class=\"profile\" href=\"#profile-box\" data-toggle=\"modal\">" . $th
 						<label for=\"profile-password\" class=\"profile-lbl\">Mot de passe :</label>
 						<input type=\"password\" class=\"form-control\" id=\"profile-password\" placeholder=\"Ton mot de passe\">
 					</div>
-					<button class=\"btn btn-warning\" type=\"submit\"><span class=\"glyphicon glyphicon-ok-sign\"></span> Connecter</button>
-					<button class=\"btn btn-warning\" data-dismiss=\"modal\"><span class=\"glyphicon glyphicon-remove-sign\"></span> Annuler</button>
+					<button class=\"btn btn-primary\" type=\"submit\"><span class=\"glyphicon glyphicon-ok\"></span> Connecter</button>
+					<button class=\"btn btn-warning\" data-dismiss=\"modal\"><span class=\"glyphicon glyphicon-ban-circle\"></span> Annuler</button>
 				    <div id=\"profile-error\" class=\"alert alert-block alert-warning profile-error\">Erreur !</div>
 				</form>
 			</div>

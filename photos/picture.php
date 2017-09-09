@@ -79,35 +79,19 @@ $db = msConnectDB();
 						<div class="col-sm-8"><input type="text" class="form-control" id="frm-extension" placeholder=".jpg .png .gif" maxlength="10" value="<?= msSecureString($pic->Extension) ?>" /></div>
 					</div>
 					<div class="form-group">
-						<label class="control-label col-sm-4" for="frm-folder">Dossier :</label>
-						<div class="col-sm-8"><select class="form-control" id="frm-folder">
-<?php	
-	$sql = "SELECT * FROM pic_folders
-			WHERE id_folder > 1
-			ORDER BY CONCAT(path, '|', folder) ASC";
-	//TODO : Exclude folders where no rights
-	$rs = $db->query($sql);
-	mb_regex_encoding('UTF-8');
-	while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
-		// $parents = mb_split('|', $row['path']);
-		// $n = count($parents) - 1;
-		$n = substr_count($row['path'], '|');
-		$ident = '';
-		for($i = 0; $i < $n; $i++) {
-			$ident .= '&hellip;&hellip;';
-		}
-		echo "\t\t\t\t\t\t\t<option value=\"" . $row['id_folder'] . "\"";
-		if($row['id_folder'] == $pic->Folder)
-			echo " selected=\"selected\"";
-		echo ">" . $ident . "&nbsp;" . msSecureString($row['folder']) . "</option>\n";
- 	}
-?>
-						</select></div>
+						<label class="control-label col-sm-4" for="frm-folder-name">Dossier :</label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-folder-open"></i></span>
+								<input type="text" class="form-control pic-folder-name" id="frm-folder-name" placeholder="sélectionne un dossier" value="<?= msSecureString($folder->Name) ?>" />
+							</div>
+							<input type="hidden" id="frm-folder-value" data-pic="folder" value="<?= $folder->ID ?>" />
+						</div>
 					</div>
-					<div class="col-sm-9 pic-center">
-						<button type="submit" class="btn btn-warning">Enregistrer</button>&nbsp;
-						<button type="button" class="btn btn-warning" id="pic-delete">Supprimer</button>&nbsp;
-						<button type="button" class="btn btn-warning" id="pic-back">Retour</button>
+					<div class="col-sm-12 pic-center">
+						<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i><span class="hidden-xs"> Enregistrer</span></button>&nbsp;
+						<button type="button" class="btn btn-danger" id="pic-delete"><i class="glyphicon glyphicon-trash"></i><span class="hidden-xs"> Supprimer</span></button>&nbsp;
+						<button type="button" class="btn btn-warning" id="pic-back"><i class="glyphicon glyphicon-arrow-left"></i><span class="hidden-xs"> Retour</span></button>
 					</div>
 				</form>
 			</div>
@@ -115,6 +99,21 @@ $db = msConnectDB();
 	</div>
 	<input type="hidden" id="pic-id" value="<?= $pic->ID ?>" />
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID ?>" />
+	<!-- ========== Selection d'un dossier ========== -->
+	<div class="modal fade" id="pic-folder-selector">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div id="pic-folder-list">Contenu</div>
+					<div class="pic-center">
+						<button class="btn btn-primary" id="pic-folder-select"><i class="glyphicon glyphicon-ok"></i> Sélectionner</button>
+						<button class="btn btn-warning" data-dismiss="modal"><i class="glyphicon glyphicon-ban-circle"></i> Annuler</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- =================================== -->
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap-3.3.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap.datepicker-1.6.4.min.js"></script>
@@ -122,5 +121,6 @@ $db = msConnectDB();
 	<script type="text/javascript" src="/res/js/sweetalert2-6.6.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/fotlan.js"></script>
 	<script type="text/javascript" src="js/picture.js"></script>
+	<script type="text/javascript" src="js/folder_selector.js"></script>
 </body>
 </html>

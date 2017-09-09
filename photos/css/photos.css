@@ -63,6 +63,30 @@
 	border: #afab8e 1px dashed;
 	background-color: #f0ede0;
 }
+.pic-auth {
+	font-weight: bold;
+	text-align: right;
+}
+.pic-vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+.pic-separator {
+	border-bottom: 1px solid #faebcc;
+	padding-top: 5px;	
+	padding-bottom: 5px;	
+}
+.pic-dup-description, .pic-dup-keywords, .pic-dup-folder {
+	cursor: pointer;	
+}
+/* ===== Folder Selector Styles ===== */
+.folder-item {
+	cursor: pointer;	
+}
+.folder-selected {
+	color: #FF6314;
+}
 /* ===== Import CSS Styles ===== */
 .pic-upload-btn-wrapper {
   position: relative;
@@ -86,15 +110,7 @@
   opacity: 0;
   cursor: pointer;
 }
-.pic-auth {
-	font-weight: bold;
-	text-align: right;
-}
-.pic-vcenter {
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-}
+
 /* ===== Blueimp Gallery Custom CSS Styles ===== */
 .blueimp-gallery > .title {
 	white-space: nowrap;
