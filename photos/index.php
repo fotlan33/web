@@ -50,7 +50,7 @@ $bEdit = $folder->IsManager($u);
 			}
 ?>
 		</div>
-		<div id="pic-links">
+		<div class="pic-slides">
 <?php
 			$sql = "SELECT id_picture, label, width, height, size, date, extension, keywords
 					FROM pic_data

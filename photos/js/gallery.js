@@ -1,4 +1,4 @@
-document.getElementById('pic-links').onclick = function (event) {
+$('.pic-slides').click(function(event) {
 	event = event || window.event;
 	var target = event.target || event.srcElement,
 		link = target.src ? target.parentNode : target,
@@ -29,4 +29,4 @@ document.getElementById('pic-links').onclick = function (event) {
 				},
 				links = this.getElementsByTagName('a');
 	blueimp.Gallery(links, options);
-};
+});

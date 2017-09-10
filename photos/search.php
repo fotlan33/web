@@ -68,7 +68,7 @@ $db = msConnectDB();
 				</div>
 			</form>
 		</div>
-		<div id="pic-links">
+		<div class="pic-slides">
 <?php
 			$sql = "SELECT p.*, MATCH(label, keywords) AGAINST(:search IN BOOLEAN MODE) AS score 
 					FROM pic_data p WHERE";

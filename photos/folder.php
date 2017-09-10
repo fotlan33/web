@@ -96,7 +96,7 @@ if($u->IsAdministrator) {
 } ?>
 			<div class="panel panel-warning">
 				<div class="panel-heading pic-panel">Photos</div>
-				<div class="panel-body" id="pic-links">
+				<div class="panel-body">
 					<form id="frm-photos" class="form-horizontal">
 <?php 
 $sql = "SELECT id_picture, label, date, extension, keywords
@@ -112,7 +112,7 @@ while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
 	$pic->Extension = $row['extension'];
 ?>
 						<div class="row pic-separator">
-							<div class="col-sm-3 pic-center">
+							<div class="col-sm-3 pic-center pic-slides">
 								<a href="<?= $pic->VirtualPath() . $pic->FileName('p') ?>">
 									<img src="<?= $pic->VirtualPath() . $pic->FileName('v') ?>" alt="Photo" />
 								</a>
@@ -144,7 +144,7 @@ while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
 											<input type="text" class="form-control pic-folder-name" name="frm-folder-name" placeholder="sélectionne un dossier" value="<?= $folder->Name ?>" />
 											<span class="input-group-addon pic-dup-folder"><i class="glyphicon glyphicon-duplicate"></i></span>
 										</div>
-										<input type="hidden" name="frm-folder-value" data-pic="folder" data-pic="folder" value="<?= $folder->ID ?>" />
+										<input type="hidden" name="frm-folder-value" data-pic="folder" value="<?= $folder->ID ?>" />
 									</div>
 								</div>
 								<div class="col-sm-12 pic-center">
@@ -156,12 +156,17 @@ while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
 <?php } ?>
 					</form>
 				</div>
-				<div id="blueimp-gallery" class="blueimp-gallery"><div class="slides"></div></div>
 			</div>
 		</div>
 	</div>
+
+	<!-- ========== Variables ========== -->
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID ?>" />
 	<input type="hidden" id="pic-parent-id" value="<?= $parent->ID ?>" />
+
+	<!-- ========== Galarie Photos ========== -->
+	<div id="blueimp-gallery" class="blueimp-gallery"><div class="slides"></div></div>
+
 	<!-- ========== Selection d'un dossier ========== -->
 	<div class="modal fade" id="pic-folder-selector">
 		<div class="modal-dialog">
@@ -176,7 +181,7 @@ while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
 			</div>
 		</div>
 	</div>
-	<!-- =================================== -->
+	
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap-3.3.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/sweetalert2-6.6.7.min.js"></script>

@@ -40,7 +40,7 @@ $db = msConnectDB();
 			<div class="col-xs-12 pic-center"><div class="pic-title"><?= $pic->Label ?></div></div>
 		</div>
 		<div class="row">
-			<div class="col-sm-3 pic-center" id="pic-links">
+			<div class="col-sm-3 pic-center pic-slides">
 				<a href="<?= $pic->VirtualPath() . $pic->FileName('p') ?>">
 					<img src="<?= $pic->VirtualPath() . $pic->FileName('v') ?>" alt="Photo" />
 				</a>
@@ -102,9 +102,14 @@ $db = msConnectDB();
 			</div>
 		</div>
 	</div>
+
+	<!-- ========== Variables ========== -->
 	<input type="hidden" id="pic-id" value="<?= $pic->ID ?>" />
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID ?>" />
+
+	<!-- ========== Galarie Photos ========== -->
 	<div id="blueimp-gallery" class="blueimp-gallery"><div class="slides"></div></div>
+	
 	<!-- ========== Selection d'un dossier ========== -->
 	<div class="modal fade" id="pic-folder-selector">
 		<div class="modal-dialog">
@@ -119,7 +124,7 @@ $db = msConnectDB();
 			</div>
 		</div>
 	</div>
-	<!-- =================================== -->
+
 	<script type="text/javascript" src="/res/js/jquery-3.2.0.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap-3.3.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/bootstrap.datepicker-1.6.4.min.js"></script>
