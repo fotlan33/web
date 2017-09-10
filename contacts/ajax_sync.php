@@ -11,6 +11,7 @@ $sync_way = (isset($_POST['sync_way'])) ? trim($_POST['sync_way']) : '';
 $google_id = (isset($_POST['google_id'])) ? trim($_POST['google_id']) : '0';
 $fotlan_id = (isset($_POST['fotlan_id'])) ? trim($_POST['fotlan_id']) : '0';
 $property_name = (isset($_POST['property_name'])) ? trim($_POST['property_name']) : '';
+$u = new FotlanProfile();
 
 $response = array(	'parent_id'	=> $parent_id,
 					'mode'		=> 'NO_WAY',
@@ -273,6 +274,21 @@ if($u->CheckAuthorization('CONTACTS', 'RW')) {
 					break;
 				case 'priv_pays':
 					$data = UpdateGoogleCountry($value, 'home', $data);
+					break;
+				case 'pro_adresse':
+					$data = UpdateGoogleStreet($value, 'work', $data);
+					break;
+				case 'pro_adresse_ext':
+					$data = UpdateGoogleNeighborhood($value, 'work', $data);
+					break;
+				case 'pro_cp':
+					$data = UpdateGooglePostcode($value, 'work', $data);
+					break;
+				case 'pro_ville':
+					$data = UpdateGoogleCity($value, 'work', $data);
+					break;
+				case 'pro_pays':
+					$data = UpdateGoogleCountry($value, 'work', $data);
 					break;
 			}
 	

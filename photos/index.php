@@ -43,7 +43,7 @@ $bEdit = $folder->IsManager($u);
 			<div class="col-xs-2 pic-menu<?php if(!$bEdit) echo '-disabled'; ?>" title="Importer" id="pic-menu-import"><span class="glyphicon glyphicon-import"></span></div>
 			<div class="col-xs-2 pic-menu<?php if(!$bEdit) echo '-disabled'; ?> col-xs-offset-2" title="Propriétés du dossier" id="pic-menu-edit"><span class="glyphicon glyphicon-pencil"></span></div>
 		</div>
-		<div class="row" id="pic-subfolders" style="display:none;">
+		<div class="row" id="pic-subfolders">
 <?php
 			foreach($subfolders as $id => $name) {
 				echo "\t\t\t<div class=\"col-xs-6 col-sm-4 col-md-2\" style=\"padding: 2px;\"><div class=\"pic-subfolder\"><a class=\"pic-lnk-subfolder\" href=\"./?f=$id\">$name</a></div></div>\n";
@@ -86,7 +86,7 @@ $bEdit = $folder->IsManager($u);
 <?php
 		if(count($subfolders) != 0)
 			echo "\t\t<div class=\"row\">
-			<div class=\"cols-xs-12 pic-subfolders-tip\">Astuce : clique sur le chevron bas <span class=\"glyphicon glyphicon-chevron-down\"></span> pour explorer les sous-dossiers.</div>
+			<div class=\"cols-xs-12 pic-subfolders-tip\" style=\"display:none;\">Astuce : clique sur le chevron bas <span class=\"glyphicon glyphicon-chevron-down\"></span> pour explorer les sous-dossiers.</div>
 		</div>\n";
 ?>
 	</div>

@@ -67,7 +67,7 @@ $Message<a class=\"profile\" href=\"#profile-box\" data-toggle=\"modal\">" . $th
 	}
 
 	public function CheckAuthorization($Application, $Action) {
-		
+
 		// DB Connection
 		if(is_null($this->_db))
 			$this->_db = msConnectDB(null);
