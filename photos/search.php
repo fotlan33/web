@@ -102,7 +102,7 @@ $db = msConnectDB();
 			<a class="prev">‹</a>
 			<a class="next">›</a>
 			<a class="close">×</a>
-			<a class="download"><span class="glyphicon glyphicon-cloud-download"></span></a>
+			<a class="download" target="_blank"><span class="glyphicon glyphicon-cloud-download"></span></a>
 		</div>
 	</div>
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID; ?>" />

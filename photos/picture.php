@@ -24,6 +24,7 @@ $db = msConnectDB();
 	<link rel="stylesheet" type="text/css" href="/res/css/bootstrap.datepicker3-1.6.4.min.css" />
 	<link rel="stylesheet" type="text/css" href="/res/css/sweetalert2-6.6.7.min.css" />
 	<link rel="stylesheet" type="text/css" href="/res/css/fotlan.css" />
+	<link rel="stylesheet" type="text/css" href="css/blueimp.gallery-2.25.2.min.css">
 	<link rel="stylesheet" type="text/css" href="css/photos.css" />
 </head>
 <body>
@@ -39,7 +40,11 @@ $db = msConnectDB();
 			<div class="col-xs-12 pic-center"><div class="pic-title"><?= $pic->Label ?></div></div>
 		</div>
 		<div class="row">
-			<div class="col-sm-3 pic-center"><img src="<?= $pic->VirtualPath() . $pic->FileName('v') ?>" alt="Photo" /></div>
+			<div class="col-sm-3 pic-center" id="pic-links">
+				<a href="<?= $pic->VirtualPath() . $pic->FileName('p') ?>">
+					<img src="<?= $pic->VirtualPath() . $pic->FileName('v') ?>" alt="Photo" />
+				</a>
+			</div>
 			<div class="col-sm-9">
 				<form id="frm" class="form-horizontal">
 					<div class="form-group" id="pic-description">
@@ -99,6 +104,7 @@ $db = msConnectDB();
 	</div>
 	<input type="hidden" id="pic-id" value="<?= $pic->ID ?>" />
 	<input type="hidden" id="pic-folder-id" value="<?= $folder->ID ?>" />
+	<div id="blueimp-gallery" class="blueimp-gallery"><div class="slides"></div></div>
 	<!-- ========== Selection d'un dossier ========== -->
 	<div class="modal fade" id="pic-folder-selector">
 		<div class="modal-dialog">
@@ -120,7 +126,9 @@ $db = msConnectDB();
 	<script type="text/javascript" src="/res/js/bootstrap.datepicker.fr-1.6.4.min.js"></script>
 	<script type="text/javascript" src="/res/js/sweetalert2-6.6.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/fotlan.js"></script>
+	<script type="text/javascript" src="js/blueimp.gallery-2.25.2.min.js"></script>
 	<script type="text/javascript" src="js/picture.js"></script>
 	<script type="text/javascript" src="js/folder_selector.js"></script>
+	<script type="text/javascript" src="js/gallery.js"></script>
 </body>
 </html>

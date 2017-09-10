@@ -117,15 +117,15 @@
 }
 .blueimp-gallery > .download {
   position: absolute;
-  top: 50px;
+  bottom: 10px;
   line-height: 30px;
   color: #fff;
   text-shadow: 0 0 2px #000;
   opacity: 0.8;
   display: none;
   padding: 15px;
-  right: 15px;
-  left: auto;
+  right: auto;
+  left: 15px;
   margin: -15px;
   font-size: 20px;
   text-decoration: none;
@@ -146,7 +146,7 @@
 }
 .blueimp-gallery > .edit {
   position: absolute;
-  top: 80px;
+  bottom: 10px;
   line-height: 30px;
   color: #fff;
   text-shadow: 0 0 2px #000;

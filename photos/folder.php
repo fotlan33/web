@@ -21,6 +21,7 @@ $db = msConnectDB();
 	<link rel="stylesheet" type="text/css" href="/res/css/bootstrap-3.3.7.min.css" />
 	<link rel="stylesheet" type="text/css" href="/res/css/sweetalert2-6.6.7.min.css" />
 	<link rel="stylesheet" type="text/css" href="/res/css/fotlan.css" />
+	<link rel="stylesheet" type="text/css" href="css/blueimp.gallery-2.25.2.min.css">
 	<link rel="stylesheet" type="text/css" href="css/photos.css" />
 </head>
 <body>
@@ -95,7 +96,7 @@ if($u->IsAdministrator) {
 } ?>
 			<div class="panel panel-warning">
 				<div class="panel-heading pic-panel">Photos</div>
-				<div class="panel-body">
+				<div class="panel-body" id="pic-links">
 					<form id="frm-photos" class="form-horizontal">
 <?php 
 $sql = "SELECT id_picture, label, date, extension, keywords
@@ -111,7 +112,11 @@ while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
 	$pic->Extension = $row['extension'];
 ?>
 						<div class="row pic-separator">
-							<div class="col-sm-3 pic-center"><img src="<?= $pic->VirtualPath() . $pic->FileName('v') ?>" alt="Photo" /></div>
+							<div class="col-sm-3 pic-center">
+								<a href="<?= $pic->VirtualPath() . $pic->FileName('p') ?>">
+									<img src="<?= $pic->VirtualPath() . $pic->FileName('v') ?>" alt="Photo" />
+								</a>
+							</div>
 							<div class="col-sm-9">
 								<div class="form-group">
 									<label class="col-sm-4 control-label">Description :</label>
@@ -151,6 +156,7 @@ while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
 <?php } ?>
 					</form>
 				</div>
+				<div id="blueimp-gallery" class="blueimp-gallery"><div class="slides"></div></div>
 			</div>
 		</div>
 	</div>
@@ -175,7 +181,9 @@ while($row = $rs->fetch(PDO::FETCH_ASSOC)) {
 	<script type="text/javascript" src="/res/js/bootstrap-3.3.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/sweetalert2-6.6.7.min.js"></script>
 	<script type="text/javascript" src="/res/js/fotlan.js"></script>
+	<script type="text/javascript" src="js/blueimp.gallery-2.25.2.min.js"></script>
 	<script type="text/javascript" src="js/folder.js"></script>
 	<script type="text/javascript" src="js/folder_selector.js"></script>
+	<script type="text/javascript" src="js/gallery.js"></script>
 </body>
 </html>

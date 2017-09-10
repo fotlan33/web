@@ -80,7 +80,7 @@ $bEdit = $folder->IsManager($u);
 	<a class="prev">‹</a>
 	<a class="next">›</a>
 	<a class="close">×</a>
-	<a class="download"><span class="glyphicon glyphicon-cloud-download"></span></a>
+	<a class="download" target="_blank"><span class="glyphicon glyphicon-cloud-download"></span></a>
 <?php if($bEdit) echo "<a class=\"edit\"><span class=\"glyphicon glyphicon-pencil\"></span></a>"; ?>
 </div>
 <?php
